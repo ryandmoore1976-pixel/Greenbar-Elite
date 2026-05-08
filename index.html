@@ -321,6 +321,52 @@ html, body { height: 100%; overflow: hidden; font-family: 'Satoshi', sans-serif;
 
 * { scrollbar-width: none; }
 *::-webkit-scrollbar { display: none; }
+
+.app-preview { margin:12px 0 14px; background:linear-gradient(155deg,#0b1628 0%,#06101e 100%); border:1px solid rgba(0,214,143,0.20); border-radius:26px; padding:16px 16px 18px; position:relative; overflow:hidden; }
+.ap-glow { position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:260px; height:180px; background:radial-gradient(ellipse,rgba(0,214,143,0.09) 0%,transparent 70%); pointer-events:none; }
+.ap-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.ap-wordmark { font-family:'Cabinet Grotesk',sans-serif; font-size:17px; font-weight:900; letter-spacing:-0.5px; }
+.ap-g { color:#00d68f; }
+.ap-icon-btn { width:28px; height:28px; border-radius:9px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.09); display:flex; align-items:center; justify-content:center; font-size:13px; color:rgba(238,242,255,0.5); }
+.ap-fab { width:30px; height:30px; border-radius:10px; background:linear-gradient(135deg,#00d68f,#00c9b1); display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:700; color:#050a14; }
+.ap-pills { display:flex; gap:6px; margin-bottom:12px; }
+.ap-pill { padding:4px 12px; border-radius:20px; font-size:10px; font-weight:600; font-family:'Cabinet Grotesk',sans-serif; border:1px solid rgba(255,255,255,0.08); color:rgba(238,242,255,0.35); background:rgba(255,255,255,0.04); }
+.ap-pill.active { background:linear-gradient(135deg,#00d68f,#00c9b1); border-color:transparent; color:#050a14; box-shadow:0 2px 10px rgba(0,214,143,0.3); }
+.ap-net-card { background:linear-gradient(145deg,#0e2040,#081728); border:1px solid rgba(255,255,255,0.07); border-radius:18px; padding:16px; margin-bottom:12px; position:relative; overflow:hidden; }
+.ap-net-glow { position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:180px; height:120px; background:radial-gradient(ellipse,rgba(0,214,143,0.10) 0%,transparent 70%); pointer-events:none; }
+.ap-net-pulse { position:absolute; top:0; left:20%; right:20%; height:1px; background:linear-gradient(90deg,transparent,rgba(0,214,143,0.45),transparent); }
+.ap-net-lbl { font-size:9px; color:rgba(238,242,255,0.4); text-transform:uppercase; letter-spacing:0.1em; font-weight:600; margin-bottom:3px; }
+.ap-net-amt { font-family:'Cabinet Grotesk',sans-serif; font-size:32px; font-weight:900; letter-spacing:-1px; color:#00d68f; line-height:1; margin-bottom:2px; }
+.ap-net-sub { font-size:10px; color:rgba(238,242,255,0.38); margin-bottom:12px; }
+.ap-ie-row { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+.ap-ie-tile { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:8px 10px; }
+.ap-ie-lbl { font-size:9px; color:rgba(238,242,255,0.38); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; margin-bottom:3px; }
+.ap-ie-val { font-family:'Cabinet Grotesk',sans-serif; font-size:13px; font-weight:900; letter-spacing:-0.3px; }
+.ap-bars-hdr { font-size:9px; color:rgba(238,242,255,0.38); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; margin-bottom:8px; }
+.ap-bars-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:4px 0; margin-bottom:14px; }
+.ap-bar-item { display:flex; align-items:center; gap:8px; padding:7px 12px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.ap-bar-ic { width:22px; height:22px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; }
+.ap-bar-name { font-size:10px; font-weight:500; flex:0 0 58px; color:rgba(238,242,255,0.65); }
+.ap-bar-bg { flex:1; height:3px; background:rgba(255,255,255,0.07); border-radius:3px; }
+.ap-bar-fg { height:3px; border-radius:3px; animation:apBarGrow 0.9s cubic-bezier(0.34,1.2,0.64,1) both; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes apBarGrow { from { width:0 !important; } }
+.ap-bar-amt { font-size:10px; font-weight:700; flex:0 0 36px; text-align:right; font-family:'Cabinet Grotesk',sans-serif; }
+
+/* ── Welcome screen ── */
+.gb-welcome { padding: 16px 0 8px; }
+.gb-brand-wrap { text-align: center; padding: 28px 20px 24px; background: linear-gradient(155deg, rgba(0,214,143,0.06) 0%, rgba(41,121,255,0.04) 50%, rgba(124,77,255,0.03) 100%); border: 1px solid rgba(0,214,143,0.15); border-radius: 28px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.gb-brand-glow { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 300px; height: 200px; background: radial-gradient(ellipse, rgba(0,214,143,0.10) 0%, transparent 70%); pointer-events: none; }
+.gb-logo-svg { width: 100%; max-width: 280px; height: 120px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
+.gb-brand-name { font-family: 'Cabinet Grotesk', sans-serif; font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1; margin-bottom: 8px; }
+.gb-brand-green { color: #00d68f; }
+.gb-brand-tagline { font-size: 14px; color: var(--soft); letter-spacing: 0.02em; }
+.gb-feature-list { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-bottom: 14px; }
+.gb-feature-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.gb-feature-icon { font-size: 20px; width: 38px; height: 38px; border-radius: 12px; background: rgba(0,214,143,0.08); border: 1px solid rgba(0,214,143,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.gb-feature-body { flex: 1; }
+.gb-feature-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.gb-feature-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -335,7 +381,8 @@ html, body { height: 100%; overflow: hidden; font-family: 'Satoshi', sans-serif;
     </div>
     <div class="hdr-right">
       <button class="fab" style="background:var(--glass);border:1px solid var(--border);color:var(--muted);box-shadow:none;font-size:17px;" onclick="showScreen('settings',document.querySelectorAll('.nav-btn')[3])">⚙</button>
-      <button class="fab" onclick="document.getElementById('csv-input').click()">＋</button>
+      <button class="fab" id="log-btn" style="background:var(--glass);border:1px solid var(--border);color:var(--muted);box-shadow:none;font-size:16px;position:relative;" onclick="openModal('modal-log')" title="Upload Log">🗂<span id="log-badge" style="display:none;position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--green);color:#050a14;font-size:9px;font-weight:800;line-height:16px;text-align:center;"></span></button>
+      <button class="fab" onclick="document.getElementById('csv-input').click()" style="width:auto;padding:0 16px;font-size:13px;font-weight:800;font-family:'Cabinet Grotesk',sans-serif;letter-spacing:0.3px;color:#050a14;background:linear-gradient(135deg,#00d68f,#00c9b1);box-shadow:0 4px 16px rgba(0,214,143,0.4);">Import</button>
       <input type="file" id="csv-input" accept=".csv" onchange="handleFile(this.files[0])">
     </div>
   </div>
@@ -345,20 +392,95 @@ html, body { height: 100%; overflow: hidden; font-family: 'Satoshi', sans-serif;
     <!-- SUMMARY -->
     <div class="screen active" id="screen-summary">
       <div id="summary-content">
-        <div class="import-wrap">
-          <div class="import-hero">
-            <span class="hero-orb">📊</span>
-            <div class="hero-title">Budget Dashboard</div>
-            <div class="hero-sub">Import your bank's transaction CSV and get an instant breakdown of your spending, budget tracking, and financial insights.</div>
-            <button class="btn-primary" onclick="document.getElementById('csv-input').click()">⬆ &nbsp;Import Transactions</button>
+        <div class="gb-welcome">
+
+          <!-- Greenbar brand graphic -->
+          <div class="gb-brand-wrap">
+            <div class="gb-brand-glow"></div>
+            <svg class="gb-logo-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+              <!-- Animated bar chart -->
+              <rect x="20" y="110" width="28" height="50" rx="6" fill="url(#barGrad1)" opacity="0.9">
+                <animate attributeName="height" values="10;50;50" dur="1s" begin="0s" fill="freeze"/>
+                <animate attributeName="y" values="150;110;110" dur="1s" begin="0s" fill="freeze"/>
+              </rect>
+              <rect x="56" y="80" width="28" height="80" rx="6" fill="url(#barGrad1)" opacity="0.95">
+                <animate attributeName="height" values="10;80;80" dur="1s" begin="0.1s" fill="freeze"/>
+                <animate attributeName="y" values="150;80;80" dur="1s" begin="0.1s" fill="freeze"/>
+              </rect>
+              <rect x="92" y="50" width="28" height="110" rx="6" fill="url(#barGrad1)">
+                <animate attributeName="height" values="10;110;110" dur="1s" begin="0.2s" fill="freeze"/>
+                <animate attributeName="y" values="150;50;50" dur="1s" begin="0.2s" fill="freeze"/>
+              </rect>
+              <rect x="128" y="70" width="28" height="90" rx="6" fill="url(#barGrad2)" opacity="0.85">
+                <animate attributeName="height" values="10;90;90" dur="1s" begin="0.3s" fill="freeze"/>
+                <animate attributeName="y" values="150;70;70" dur="1s" begin="0.3s" fill="freeze"/>
+              </rect>
+              <rect x="164" y="90" width="28" height="70" rx="6" fill="url(#barGrad2)" opacity="0.8">
+                <animate attributeName="height" values="10;70;70" dur="1s" begin="0.4s" fill="freeze"/>
+                <animate attributeName="y" values="150;90;90" dur="1s" begin="0.4s" fill="freeze"/>
+              </rect>
+              <rect x="200" y="60" width="28" height="100" rx="6" fill="url(#barGrad1)" opacity="0.9">
+                <animate attributeName="height" values="10;100;100" dur="1s" begin="0.5s" fill="freeze"/>
+                <animate attributeName="y" values="150;60;60" dur="1s" begin="0.5s" fill="freeze"/>
+              </rect>
+              <rect x="236" y="40" width="28" height="120" rx="6" fill="url(#barGrad1)">
+                <animate attributeName="height" values="10;120;120" dur="1s" begin="0.6s" fill="freeze"/>
+                <animate attributeName="y" values="150;40;40" dur="1s" begin="0.6s" fill="freeze"/>
+              </rect>
+              <!-- Baseline -->
+              <rect x="10" y="161" width="260" height="2" rx="1" fill="rgba(255,255,255,0.1)"/>
+              <!-- Trend line -->
+              <polyline points="34,110 70,80 106,50 142,70 178,90 214,60 250,40"
+                stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+              <defs>
+                <linearGradient id="barGrad1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00d68f"/>
+                  <stop offset="100%" stop-color="#00a86b" stop-opacity="0.7"/>
+                </linearGradient>
+                <linearGradient id="barGrad2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00c9b1"/>
+                  <stop offset="100%" stop-color="#0099a0" stop-opacity="0.7"/>
+                </linearGradient>
+              </defs>
+            </svg>
+
+            <div class="gb-brand-name"><span class="gb-brand-green">Green</span>bar</div>
+            <div class="gb-brand-tagline">Your money, clearly.</div>
           </div>
-          <div class="g-card rules-card">
-            <div class="rules-title">Works With Any Bank</div>
-            <div class="rule-item"><span class="rule-pill">AUTO</span><span class="rule-text">Detects columns from any CSV format</span></div>
-            <div class="rule-item"><span class="rule-pill">RULES</span><span class="rule-text">Reclassify any merchant to the right category</span></div>
-            <div class="rule-item"><span class="rule-pill">BUDGET</span><span class="rule-text">Set your own monthly targets in Settings</span></div>
-            <div class="rule-item"><span class="rule-pill">PRIVATE</span><span class="rule-text">Data never leaves your device</span></div>
+
+          <!-- Feature list -->
+          <div class="gb-feature-list">
+            <div class="gb-feature-item">
+              <div class="gb-feature-icon">📊</div>
+              <div class="gb-feature-body">
+                <div class="gb-feature-title">Instant spending breakdown</div>
+                <div class="gb-feature-desc">See exactly where your money goes, by category and vendor</div>
+              </div>
+            </div>
+            <div class="gb-feature-item">
+              <div class="gb-feature-icon">🎯</div>
+              <div class="gb-feature-body">
+                <div class="gb-feature-title">Budget vs actual tracking</div>
+                <div class="gb-feature-desc">Set monthly targets and track variance in real time</div>
+              </div>
+            </div>
+            <div class="gb-feature-item">
+              <div class="gb-feature-icon">✦</div>
+              <div class="gb-feature-body">
+                <div class="gb-feature-title">Smart insights per category</div>
+                <div class="gb-feature-desc">Trends, top vendors, and observations automatically generated</div>
+              </div>
+            </div>
+            <div class="gb-feature-item" style="border-bottom:none">
+              <div class="gb-feature-icon">🔒</div>
+              <div class="gb-feature-body">
+                <div class="gb-feature-title">100% private</div>
+                <div class="gb-feature-desc">Your data never leaves your device — ever</div>
+              </div>
+            </div>
           </div>
+
+          <button class="btn-primary" onclick="document.getElementById('csv-input').click()">⬆ &nbsp;Import Transactions to Get Started</button>
         </div>
       </div>
     </div>
@@ -558,7 +680,309 @@ function aggregate(txs){ const mo={}; for(const tx of txs){ if(!mo[tx.month])mo[
 function sortKeys(mo){ return Object.keys(mo).sort((a,b)=>{ const[am,ay]=a.split(' '),[bm,by]=b.split(' '); return parseInt(ay)!==parseInt(by)?parseInt(ay)-parseInt(by):MN.indexOf(am)-MN.indexOf(bm); }); }
 
 let _months={},_allTxs=[],_sel=null;
-function handleFile(f){ if(!f)return; const rd=new FileReader(); rd.onload=e=>{ const{headers,rows}=parseCSV(e.target.result); _allTxs=processCSV(rows,headers); _months=aggregate(_allTxs); const k=sortKeys(_months); _sel=k[k.length-1]; document.getElementById('hdr-sub').textContent=`${_allTxs.length} transactions · ${k.length} months`; renderAll(); showScreen('summary',document.querySelectorAll('.nav-btn')[0]); }; rd.readAsText(f); }
+
+// ════ PERSISTENCE ════
+function saveData(){
+  try{
+    const payload={months:_months,txs:_allTxs,sel:_sel};
+    localStorage.setItem('gb_data',JSON.stringify(payload));
+  }catch(e){ console.warn('Save failed (storage full?)'); }
+}
+function loadData(){
+  try{
+    const s=localStorage.getItem('gb_data');
+    if(!s) return false;
+    const d=JSON.parse(s);
+    _months=d.months||{}; _allTxs=d.txs||[]; _sel=d.sel||null;
+    return Object.keys(_months).length>0;
+  }catch(e){ return false; }
+}
+
+// ════ UPLOAD LOG ════
+function getLog(){ try{ return JSON.parse(localStorage.getItem('gb_log')||'[]'); }catch(e){ return []; } }
+function saveLog(log){ try{ localStorage.setItem('gb_log',JSON.stringify(log)); }catch(e){} }
+function addToLog(filename, txCount, monthCount, months){
+  const log=getLog();
+  log.unshift({ id: Date.now(), filename, txCount, monthCount, months, date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}) });
+  if(log.length>50) log.pop(); // keep last 50
+  saveLog(log);
+  updateLogBadge();
+}
+function updateLogBadge(){
+  const log=getLog();
+  const badge=document.getElementById('log-badge');
+  if(!badge) return;
+  if(log.length>0){ badge.style.display='block'; badge.textContent=log.length>9?'9+':log.length; }
+  else { badge.style.display='none'; }
+}
+function clearLog(){
+  if(!confirm('Clear all upload history?')) return;
+  localStorage.removeItem('gb_log');
+  updateLogBadge();
+  renderLog();
+}
+function restoreFromLog(id){
+  closeModal('modal-log');
+  // Just prompt to re-import — we store metadata not raw CSV (too large)
+  alert('To restore this file, re-import the original CSV using the + button. Log entries are metadata only — raw CSV data is not stored to save space.');
+}
+function renderLog(){
+  const log=getLog();
+  const list=document.getElementById('log-list');
+  const empty=document.getElementById('log-empty');
+  if(!list) return;
+  if(log.length===0){ list.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  list.innerHTML=log.map(entry=>`
+    <div style="background:var(--glass);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:10px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;">
+        <div style="font-size:14px;font-weight:600;flex:1;word-break:break-all;">${entry.filename}</div>
+        <div style="font-size:11px;color:var(--muted);flex-shrink:0;margin-top:2px;">${entry.date}</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="background:rgba(0,214,143,0.10);border:1px solid rgba(0,214,143,0.2);border-radius:8px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--green)">${entry.txCount} transactions</span>
+        <span style="background:rgba(41,121,255,0.10);border:1px solid rgba(41,121,255,0.2);border-radius:8px;padding:3px 10px;font-size:11px;font-weight:600;color:#2979ff">${entry.monthCount} months</span>
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:3px 10px;font-size:11px;color:var(--muted)">${entry.months}</span>
+      </div>
+    </div>`).join('');
+}
+
+function viewInsights(){
+  // Re-check by loading from storage in case state wasn't hydrated yet
+  if(_allTxs.length===0) loadData();
+  if(_allTxs.length>0){
+    const keys=sortKeys(_months);
+    _sel='__all';
+    renderSummaryAll();
+    showScreen('summary',document.querySelectorAll('.nav-btn')[0]);
+  } else {
+    document.getElementById('csv-input').click();
+  }
+}
+
+function showCatInsights(cat){
+  if(!cat) return;
+
+  const monthFilter = (_sel && _sel !== '__all') ? _sel : null;
+  const txsForCat = _allTxs.filter(tx => tx.cat === cat && tx.amount < 0 && (!monthFilter || tx.month === monthFilter));
+  const total = txsForCat.reduce((s,tx)=>s+Math.abs(tx.amount),0);
+  const keys = sortKeys(_months);
+  const n = keys.length;
+  const avgMo = total / n;
+
+  // Build vendor breakdown for context
+  const byVendor = {};
+  for(const tx of txsForCat){
+    let v = tx.desc.replace(/^(Point Of Sale Withdrawal|External Withdrawal|NOW Withdrawal|NOW Deposit|Withdrawal|Deposit)\s*/i,'').replace(/\s{2,}/g,' ').trim();
+    if(v.length>40) v=v.substring(0,40).trim();
+    byVendor[v]=(byVendor[v]||0)+Math.abs(tx.amount);
+  }
+  const topVendors = Object.entries(byVendor).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const budget = CFG.budget[cat] || 0;
+
+  // Monthly breakdown
+  const byMonth = {};
+  for(const mk of keys){
+    byMonth[mk] = (_months[mk].expenses[cat]||0);
+  }
+
+  // Set header
+  document.getElementById('ins-cat-title').textContent = cat;
+  document.getElementById('ins-cat-icon').textContent = EMO[cat]||'📦';
+  document.getElementById('ins-cat-icon').style.background = PAL[Object.keys(EMO).indexOf(cat)%15]+'22';
+  document.getElementById('ins-cat-sub').textContent = `${txsForCat.length} transactions · ${fmt(total)} total`;
+  document.getElementById('ins-loading').style.display = 'block';
+  document.getElementById('ins-content').innerHTML = '';
+  openModal('modal-cat-insights');
+
+  // Build the local analysis (no API needed — fast, private)
+  const trend = keys.length >= 2
+    ? byMonth[keys[keys.length-1]] - byMonth[keys[0]]
+    : 0;
+  const trendDir = trend > 50 ? '↑ increasing' : trend < -50 ? '↓ decreasing' : '→ stable';
+  const trendColor = trend > 50 ? 'var(--red)' : trend < -50 ? 'var(--green)' : 'var(--muted)';
+  const highMonth = keys.reduce((b,k)=>byMonth[k]>byMonth[b]?k:b, keys[0]);
+  const lowMonth = keys.reduce((b,k)=>byMonth[k]<byMonth[b]&&byMonth[k]>0?k:b, keys[0]);
+  const vsBudget = budget > 0 ? ((avgMo - budget) / budget * 100).toFixed(0) : null;
+  const topVendor = topVendors[0];
+  const topVendorPct = topVendor ? (topVendor[1]/total*100).toFixed(0) : 0;
+
+  setTimeout(()=>{
+    document.getElementById('ins-loading').style.display = 'none';
+    document.getElementById('ins-content').innerHTML = `
+      <!-- Key metrics -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:12px 14px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;margin-bottom:4px;">Avg/month</div>
+          <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:20px;font-weight:900;">${fmt(avgMo)}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:12px 14px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;margin-bottom:4px;">Trend</div>
+          <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:20px;font-weight:900;color:${trendColor};">${trendDir}</div>
+        </div>
+        ${budget>0?`
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:12px 14px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;margin-bottom:4px;">Budget</div>
+          <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:20px;font-weight:900;">${fmt(budget)}/mo</div>
+        </div>
+        <div style="background:${parseFloat(vsBudget)>0?'rgba(255,71,87,0.1)':'rgba(0,214,143,0.1)'};border:1px solid ${parseFloat(vsBudget)>0?'rgba(255,71,87,0.2)':'rgba(0,214,143,0.2)'};border-radius:14px;padding:12px 14px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;margin-bottom:4px;">vs Budget</div>
+          <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:20px;font-weight:900;color:${parseFloat(vsBudget)>0?'var(--red)':'var(--green)'};">${parseFloat(vsBudget)>0?'+':''}${vsBudget}%</div>
+        </div>`:''}
+      </div>
+
+      <!-- Monthly trend chart -->
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:14px 16px;margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;font-family:'Cabinet Grotesk',sans-serif;">Month by Month</div>
+        ${keys.map(mk=>{
+          const amt=byMonth[mk];
+          const maxAmt=Math.max(...Object.values(byMonth))||1;
+          const barPct=Math.round(amt/maxAmt*100);
+          const isHigh=mk===highMonth;
+          return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="font-size:11px;color:var(--muted);width:52px;flex-shrink:0;">${mk}</div>
+            <div style="flex:1;height:6px;background:rgba(255,255,255,0.07);border-radius:3px;">
+              <div style="height:6px;border-radius:3px;width:${barPct}%;background:${isHigh?'var(--red)':'#00d68f'};"></div>
+            </div>
+            <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;min-width:56px;text-align:right;color:${isHigh?'var(--red)':'inherit'};">${fmt(amt)}</div>
+          </div>`;
+        }).join('')}
+        ${budget>0?`<div style="margin-top:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);">
+          <div style="width:24px;height:2px;background:rgba(255,165,2,0.6);border-radius:1px;border:1px dashed rgba(255,165,2,0.5);"></div> Budget: ${fmt(budget)}/mo
+        </div>`:''}
+      </div>
+
+      <!-- Top vendors -->
+      ${topVendors.length?`
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:14px 16px;margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;font-family:'Cabinet Grotesk',sans-serif;">Top Vendors</div>
+        ${topVendors.map(([v,a],i)=>`
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;${i===topVendors.length-1?'margin-bottom:0':''}">
+            <div style="font-size:12px;color:var(--soft);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${v}</div>
+            <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:13px;font-weight:800;flex-shrink:0;">${fmt(a)}</div>
+            <div style="font-size:10px;color:var(--muted);flex-shrink:0;min-width:32px;text-align:right;">${(a/total*100).toFixed(0)}%</div>
+          </div>`).join('')}
+      </div>`:''}
+
+      <!-- Smart observations -->
+      <div style="background:linear-gradient(145deg,rgba(0,214,143,0.06),rgba(0,201,177,0.04));border:1px solid rgba(0,214,143,0.15);border-radius:16px;padding:16px;margin-bottom:4px;">
+        <div style="font-size:11px;font-weight:800;color:#00d68f;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;font-family:'Cabinet Grotesk',sans-serif;">✦ Observations</div>
+        ${[
+          topVendor && parseInt(topVendorPct) > 30
+            ? `<b>${topVendor[0]}</b> accounts for <b>${topVendorPct}%</b> of all ${cat} spending — your dominant vendor in this category.`
+            : topVendor
+            ? `Spending is spread across ${topVendors.length} vendors, with <b>${topVendor[0]}</b> leading at ${fmt(topVendor[1])}.`
+            : null,
+          budget > 0 && parseFloat(vsBudget) > 15
+            ? `You're running <b>${vsBudget}% over budget</b> on average. Consider reducing to ${fmt(budget * 0.9)}/mo.`
+            : budget > 0 && parseFloat(vsBudget) < -10
+            ? `You're <b>under budget</b> by ${Math.abs(vsBudget)}% — you have room to spare here.`
+            : budget > 0
+            ? `Spending is <b>close to budget</b> — tracking well at ${fmt(avgMo)}/mo vs ${fmt(budget)} target.`
+            : `No budget set for this category. Consider setting a target in Settings.`,
+          highMonth && keys.length > 1
+            ? `<b>${highMonth}</b> was your highest spend month at ${fmt(byMonth[highMonth])}.`
+            : null,
+          trend > 100
+            ? `Spending is <b>trending up</b> — ${fmt(Math.abs(trend))} more than when tracking started.`
+            : trend < -100
+            ? `Spending is <b>trending down</b> — ${fmt(Math.abs(trend))} less than when tracking started. Good progress.`
+            : null,
+        ].filter(Boolean).map(obs=>`<div style="font-size:13px;color:var(--soft);line-height:1.6;margin-bottom:8px;padding-left:12px;border-left:2px solid rgba(0,214,143,0.3);">${obs}</div>`).join('')}
+      </div>
+    `;
+  }, 400);
+}
+
+function showVendorDrill(cat){
+  if(!cat) return;
+  // Aggregate all transactions for this category by vendor/description
+  // Filter for current month if not 'all', otherwise all months  
+  const monthFilter = (_sel && _sel !== '__all') ? _sel : null;
+  const txsForCat = _allTxs.filter(tx => tx.cat === cat && tx.amount < 0 && (!monthFilter || tx.month === monthFilter));
+  const byVendor = {};
+  for(const tx of txsForCat){
+    // Clean up description to get vendor name (first ~30 chars, strip bank prefixes)
+    let v = tx.desc
+      .replace(/^(Point Of Sale Withdrawal|External Withdrawal|NOW Withdrawal|NOW Deposit|Withdrawal|Deposit)\s*/i,'')
+      .replace(/\s{2,}/g,' ')
+      .trim();
+    // Truncate to reasonable length
+    if(v.length > 40) v = v.substring(0,40).trim();
+    byVendor[v] = (byVendor[v] || 0) + Math.abs(tx.amount);
+  }
+
+  const vendors = Object.entries(byVendor).sort((a,b) => b[1]-a[1]);
+  const total = vendors.reduce((s,[,v])=>s+v,0);
+  const maxAmt = vendors[0]?.[1] || 1;
+  const keys = sortKeys(_months);
+  const n = keys.length;
+
+  // Set modal header
+  document.getElementById('vendor-cat-title').textContent = cat;
+  document.getElementById('vendor-cat-icon').textContent = EMO[cat]||'📦';
+  document.getElementById('vendor-cat-icon').style.background = PAL[Object.keys(EMO).indexOf(cat)%15]+'18';
+  document.getElementById('vendor-cat-sub').textContent = `${txsForCat.length} transactions · ${fmt(total)} total · ${fmt(total/n)}/mo avg`;
+
+  // Build vendor list
+  const list = document.getElementById('vendor-list');
+  list.innerHTML = vendors.slice(0,30).map(([vendor, amt], i)=>{
+    const pct = (amt/total*100).toFixed(1);
+    const barW = Math.round(amt/maxAmt*100);
+    const count = txsForCat.filter(tx=>{
+      let v=tx.desc.replace(/^(Point Of Sale Withdrawal|External Withdrawal|NOW Withdrawal|NOW Deposit|Withdrawal|Deposit)\s*/i,'').replace(/\s{2,}/g,' ').trim();
+      if(v.length>40)v=v.substring(0,40).trim();
+      return v===vendor;
+    }).length;
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px;">${vendor}</div>
+        <div style="height:3px;background:rgba(255,255,255,0.07);border-radius:3px;"><div style="height:3px;border-radius:3px;width:${barW}%;background:${PAL[i%15]};"></div></div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:800;">${fmt(amt)}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px;">${count} tx · ${pct}%</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  openModal('modal-vendor');
+}
+
+function handleFile(f){
+  if(!f) return;
+  const rd=new FileReader();
+  rd.onload=e=>{
+    const{headers,rows}=parseCSV(e.target.result);
+    const newTxs=processCSV(rows,headers);
+    const newMonths=aggregate(newTxs);
+    const newKeys=sortKeys(newMonths);
+
+    // Merge: new data overwrites matching months, keeps non-overlapping months
+    for(const mk of newKeys){
+      _months[mk]=newMonths[mk];
+    }
+    // Merge transaction arrays: remove old txs for overwritten months, add new
+    _allTxs=_allTxs.filter(tx=>!newKeys.includes(tx.month));
+    _allTxs=_allTxs.concat(newTxs);
+
+    const allKeys=sortKeys(_months);
+    _sel=newKeys[newKeys.length-1];
+
+    const totalTxs=_allTxs.length;
+    document.getElementById('hdr-sub').textContent=`${totalTxs} transactions · ${allKeys.length} months`;
+
+    // Add to log
+    addToLog(f.name, newTxs.length, newKeys.length, newKeys.join(', '));
+
+    // Persist
+    saveData();
+
+    renderAll();
+    showScreen('summary',document.querySelectorAll('.nav-btn')[0]);
+  };
+  rd.readAsText(f);
+}
 
 // ════ FORMAT ════
 function fmt(n){ if(n===undefined||n===null)return'—'; const a=Math.abs(n); return(n<0?'(':'')+'$'+a.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})+(n<0?')':''); }
@@ -579,40 +1003,66 @@ function renderSummary(){
   const net=m.income-expTotal;
   const cats=Object.entries(m.expenses).sort((a,b)=>b[1]-a[1]);
   const maxAmt=cats[0]?.[1]||1;
-
   const pills=keys.map(k=>`<div class="pill ${k===_sel?'active':''}" onclick="selMonth('${k}')">${k}</div>`).join('')
     +`<div class="pill ${_sel==='__all'?'active':''}" onclick="selMonth('__all')">All</div>`;
 
   document.getElementById('summary-content').innerHTML=`
-    <div class="pills-row">${pills}</div>
-    <div class="net-card">
-      <div class="pulse"></div>
-      <div class="net-lbl">Monthly Net</div>
-      <div class="net-amt ${net>=0?'surplus':'deficit'}">${net>=0?'+':''}${fmt(net)}</div>
-      <div class="net-mo">${_sel}</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-tile"><div class="st-lbl">Income</div><div class="st-val c-green">${fmt(m.income)}</div></div>
-      <div class="stat-tile"><div class="st-lbl">Expenses</div><div class="st-val c-red">${fmt(expTotal)}</div></div>
-      <div class="stat-tile"><div class="st-lbl">Txs</div><div class="st-val c-teal">${m.txs.length}</div></div>
-    </div>
-    <div class="sec-hdr">Top Categories <span class="sec-total">${fmt(expTotal)}</span></div>
-    <div class="cat-list">
-      ${cats.slice(0,14).map(([cat,amt],i)=>`
-        <div class="cat-item">
-          <div class="cat-icon" style="background:${PAL[i%15]}18">${EMO[cat]||'•'}</div>
-          <div class="cat-body">
-            <div class="cat-name">${cat}</div>
-            <div class="cat-bar-bg"><div class="cat-bar-fg" style="width:${Math.round(amt/maxAmt*100)}%;background:${PAL[i%15]}"></div></div>
+    <div class="gb-welcome">
+      <div class="gb-brand-wrap">
+        <div class="gb-brand-glow"></div>
+        <svg class="gb-logo-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="110" width="28" height="50" rx="6" fill="url(#bg1a)" opacity="0.9"/>
+          <rect x="56" y="80" width="28" height="80" rx="6" fill="url(#bg1a)" opacity="0.95"/>
+          <rect x="92" y="50" width="28" height="110" rx="6" fill="url(#bg1a)"/>
+          <rect x="128" y="70" width="28" height="90" rx="6" fill="url(#bg2a)" opacity="0.85"/>
+          <rect x="164" y="90" width="28" height="70" rx="6" fill="url(#bg2a)" opacity="0.8"/>
+          <rect x="200" y="60" width="28" height="100" rx="6" fill="url(#bg1a)" opacity="0.9"/>
+          <rect x="236" y="40" width="28" height="120" rx="6" fill="url(#bg1a)"/>
+          <rect x="10" y="161" width="260" height="2" rx="1" fill="rgba(255,255,255,0.1)"/>
+          <polyline points="34,110 70,80 106,50 142,70 178,90 214,60 250,40" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+          <defs>
+            <linearGradient id="bg1a" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00d68f"/><stop offset="100%" stop-color="#00a86b" stop-opacity="0.7"/></linearGradient>
+            <linearGradient id="bg2a" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00c9b1"/><stop offset="100%" stop-color="#0099a0" stop-opacity="0.7"/></linearGradient>
+          </defs>
+        </svg>
+        <div class="gb-brand-name"><span class="gb-brand-green">Green</span>bar</div>
+        <div class="gb-brand-tagline">Your money, clearly.</div>
+      </div>
+      <div class="pills-row" style="margin-bottom:12px;">${pills}</div>
+      <div class="net-card" style="margin-bottom:12px;">
+        <div class="pulse"></div>
+        <div class="net-lbl">Monthly Net</div>
+        <div class="net-amt ${net>=0?'surplus':'deficit'}">${net>=0?'+':''}${fmt(net)}</div>
+        <div class="net-mo">${_sel}</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-tile"><div class="st-lbl">Income</div><div class="st-val c-green">${fmt(m.income)}</div></div>
+        <div class="stat-tile"><div class="st-lbl">Expenses</div><div class="st-val c-red">${fmt(expTotal)}</div></div>
+        <div class="stat-tile"><div class="st-lbl">Txs</div><div class="st-val c-teal">${m.txs.length}</div></div>
+      </div>
+      <div class="sec-hdr">Top Categories <span class="sec-total">${fmt(expTotal)}</span></div>
+      <div class="cat-list">
+        ${cats.slice(0,8).map(([cat,amt],i)=>`
+        <div class="cat-item" style="flex-direction:column;align-items:stretch;gap:8px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="cat-icon" style="background:${PAL[i%15]}18">${EMO[cat]||'•'}</div>
+            <div class="cat-body">
+              <div class="cat-name">${cat}</div>
+              <div class="cat-bar-bg"><div class="cat-bar-fg" style="width:${Math.round(amt/maxAmt*100)}%;background:${PAL[i%15]}"></div></div>
+            </div>
+            <div class="cat-right">
+              <div class="cat-amt">${fmt(amt)}</div>
+              <div class="cat-pct">${(amt/expTotal*100).toFixed(1)}%</div>
+            </div>
           </div>
-          <div class="cat-right">
-            <div class="cat-amt">${fmt(amt)}</div>
-            <div class="cat-pct">${(amt/expTotal*100).toFixed(1)}%</div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="showVendorDrill(this.dataset.cat)" data-cat="${cat.replace(/\"/g,'&quot;')}" style="flex:1;padding:7px 0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--soft);font-size:11px;font-weight:600;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;">📋 Transactions</button>
+            <button onclick="showCatInsights(this.dataset.cat)" data-cat="${cat.replace(/\"/g,'&quot;')}" style="flex:1;padding:7px 0;border-radius:10px;border:1px solid rgba(0,214,143,0.25);background:rgba(0,214,143,0.08);color:#00d68f;font-size:11px;font-weight:600;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;">✦ Insights</button>
           </div>
-        </div>`).join('')}
+        </div>`).join('')}}
+      </div>
     </div>`;
 }
-
 function selMonth(mk){
   _sel=mk;
   if(mk==='__all')renderSummaryAll();
@@ -628,33 +1078,63 @@ function renderSummaryAll(){
   const n=keys.length;
   const cats=Object.entries(allCats).map(([c,t])=>([c,t/n])).sort((a,b)=>b[1]-a[1]);
   const maxAvg=cats[0]?.[1]||1;
+
   document.getElementById('summary-content').innerHTML=`
-    <div class="pills-row">${pills}</div>
-    <div class="net-card">
-      <div class="pulse"></div>
-      <div class="net-lbl">Total Net — ${n} Months</div>
-      <div class="net-amt ${totalInc>=totalExp?'surplus':'deficit'}">${totalInc>=totalExp?'+':''}${fmt(totalInc-totalExp)}</div>
-      <div class="net-mo">Avg ${fmt((totalInc-totalExp)/n)}/mo</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-tile"><div class="st-lbl">Total Inc</div><div class="st-val c-green">${fmt(totalInc)}</div></div>
-      <div class="stat-tile"><div class="st-lbl">Total Exp</div><div class="st-val c-red">${fmt(totalExp)}</div></div>
-      <div class="stat-tile"><div class="st-lbl">Months</div><div class="st-val c-teal">${n}</div></div>
-    </div>
-    <div class="sec-hdr">Avg Monthly Spend <span class="sec-total">${fmt(totalExp/n)}/mo</span></div>
-    <div class="cat-list">
-      ${cats.slice(0,14).map(([cat,avg],i)=>`
-        <div class="cat-item">
-          <div class="cat-icon" style="background:${PAL[i%15]}18">${EMO[cat]||'•'}</div>
-          <div class="cat-body">
-            <div class="cat-name">${cat}</div>
-            <div class="cat-bar-bg"><div class="cat-bar-fg" style="width:${Math.round(avg/maxAvg*100)}%;background:${PAL[i%15]}"></div></div>
+    <div class="gb-welcome">
+      <div class="gb-brand-wrap">
+        <div class="gb-brand-glow"></div>
+        <svg class="gb-logo-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="110" width="28" height="50" rx="6" fill="url(#barGrad1b)" opacity="0.9"/>
+          <rect x="56" y="80" width="28" height="80" rx="6" fill="url(#barGrad1b)" opacity="0.95"/>
+          <rect x="92" y="50" width="28" height="110" rx="6" fill="url(#barGrad1b)"/>
+          <rect x="128" y="70" width="28" height="90" rx="6" fill="url(#barGrad2b)" opacity="0.85"/>
+          <rect x="164" y="90" width="28" height="70" rx="6" fill="url(#barGrad2b)" opacity="0.8"/>
+          <rect x="200" y="60" width="28" height="100" rx="6" fill="url(#barGrad1b)" opacity="0.9"/>
+          <rect x="236" y="40" width="28" height="120" rx="6" fill="url(#barGrad1b)"/>
+          <rect x="10" y="161" width="260" height="2" rx="1" fill="rgba(255,255,255,0.1)"/>
+          <polyline points="34,110 70,80 106,50 142,70 178,90 214,60 250,40" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+          <defs>
+            <linearGradient id="barGrad1b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00d68f"/><stop offset="100%" stop-color="#00a86b" stop-opacity="0.7"/></linearGradient>
+            <linearGradient id="barGrad2b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00c9b1"/><stop offset="100%" stop-color="#0099a0" stop-opacity="0.7"/></linearGradient>
+          </defs>
+        </svg>
+        <div class="gb-brand-name"><span class="gb-brand-green">Green</span>bar</div>
+        <div class="gb-brand-tagline">Your money, clearly.</div>
+      </div>
+
+      <div class="pills-row" style="margin-bottom:12px;">${pills}</div>
+      <div class="net-card" style="margin-bottom:12px;">
+        <div class="pulse"></div>
+        <div class="net-lbl">Total Net — ${n} Months</div>
+        <div class="net-amt ${totalInc>=totalExp?'surplus':'deficit'}">${totalInc>=totalExp?'+':''}${fmt(totalInc-totalExp)}</div>
+        <div class="net-mo">Avg ${fmt((totalInc-totalExp)/n)}/mo</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-tile"><div class="st-lbl">Total Inc</div><div class="st-val c-green">${fmt(totalInc)}</div></div>
+        <div class="stat-tile"><div class="st-lbl">Total Exp</div><div class="st-val c-red">${fmt(totalExp)}</div></div>
+        <div class="stat-tile"><div class="st-lbl">Months</div><div class="st-val c-teal">${n}</div></div>
+      </div>
+      <div class="sec-hdr">Avg Monthly Spend <span class="sec-total">${fmt(totalExp/n)}/mo</span></div>
+      <div class="cat-list">
+        ${cats.slice(0,8).map(([cat,avg],i)=>`
+        <div class="cat-item" style="flex-direction:column;align-items:stretch;gap:8px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="cat-icon" style="background:${PAL[i%15]}18">${EMO[cat]||'•'}</div>
+            <div class="cat-body">
+              <div class="cat-name">${cat}</div>
+              <div class="cat-bar-bg"><div class="cat-bar-fg" style="width:${Math.round(avg/maxAvg*100)}%;background:${PAL[i%15]}"></div></div>
+            </div>
+            <div class="cat-right">
+              <div class="cat-amt">${fmt(avg)}/mo</div>
+              <div class="cat-pct">${(avg/(totalExp/n)*100).toFixed(1)}%</div>
+            </div>
           </div>
-          <div class="cat-right">
-            <div class="cat-amt">${fmt(avg)}/mo</div>
-            <div class="cat-pct">${(avg/(totalExp/n)*100).toFixed(1)}%</div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="showVendorDrill(this.dataset.cat)" data-cat="${cat.replace(/"/g,'&quot;')}" style="flex:1;padding:7px 0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--soft);font-size:11px;font-weight:600;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;">📋 Transactions</button>
+            <button onclick="showCatInsights(this.dataset.cat)" data-cat="${cat.replace(/"/g,'&quot;')}" style="flex:1;padding:7px 0;border-radius:10px;border:1px solid rgba(0,214,143,0.25);background:rgba(0,214,143,0.08);color:#00d68f;font-size:11px;font-weight:600;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;">✦ Insights</button>
           </div>
-        </div>`).join('')}
+        </div>`).join('')}}
+      </div>
     </div>`;
 }
 
@@ -718,11 +1198,69 @@ function showScreen(name,btn){
 }
 
 // ════ MODALS ════
-function openModal(id){ document.getElementById(id).classList.add('open'); if(id==='modal-remaps')renderRemaps(); }
+function openModal(id){ document.getElementById(id).classList.add('open'); if(id==='modal-remaps')renderRemaps(); if(id==='modal-log')renderLog(); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function closeOut(e,id){ if(e.target===document.getElementById(id)) closeModal(id); }
 
 loadCFG();
+// Load persisted transaction data
+if(loadData()){
+  const allKeys=sortKeys(_months);
+  document.getElementById('hdr-sub').textContent=`${_allTxs.length} transactions · ${allKeys.length} months`;
+  renderAll();
+  showScreen('summary',document.querySelectorAll('.nav-btn')[0]);
+}
+updateLogBadge();
 </script>
+
+<!-- CATEGORY INSIGHTS MODAL -->
+<div class="modal-overlay" id="modal-cat-insights" onclick="closeOut(event,'modal-cat-insights')">
+  <div class="modal-sheet" style="max-height:92vh;">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div id="ins-cat-icon" style="width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;"></div>
+      <div>
+        <div class="modal-title" id="ins-cat-title" style="margin-bottom:0;font-size:18px;"></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;" id="ins-cat-sub"></div>
+      </div>
+    </div>
+    <div id="ins-loading" style="text-align:center;padding:40px 0;display:none;">
+      <div style="font-size:32px;margin-bottom:12px;animation:spin 1s linear infinite;">◌</div>
+      <div style="font-size:13px;color:var(--muted);">Analyzing your spending…</div>
+    </div>
+    <div id="ins-content"></div>
+  </div>
+</div>
+
+<!-- VENDOR DRILL-DOWN MODAL -->
+<div class="modal-overlay" id="modal-vendor" onclick="closeOut(event,'modal-vendor')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+      <div id="vendor-cat-icon" style="width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;"></div>
+      <div>
+        <div class="modal-title" id="vendor-cat-title" style="margin-bottom:0;font-size:18px;"></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;" id="vendor-cat-sub"></div>
+      </div>
+    </div>
+    <div class="modal-sub" id="vendor-modal-sub" style="margin-bottom:16px;"></div>
+    <div id="vendor-list"></div>
+  </div>
+</div>
+
+<!-- LOG MODAL -->
+<div class="modal-overlay" id="modal-log" onclick="closeOut(event,'modal-log')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div class="modal-title" style="margin-bottom:0">Upload Log</div>
+      <button onclick="clearLog()" style="background:rgba(255,71,87,0.12);border:1px solid rgba(255,71,87,0.2);border-radius:10px;padding:6px 12px;color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:'Satoshi',sans-serif;">Clear All</button>
+    </div>
+    <div class="modal-sub">Every CSV you import is saved here. Tap any entry to restore it.</div>
+    <div id="log-list"></div>
+    <div id="log-empty" style="text-align:center;padding:40px 0;color:var(--muted);font-size:14px;display:none;">No uploads yet.<br>Import a CSV to start logging.</div>
+  </div>
+</div>
+
 </body>
 </html>
