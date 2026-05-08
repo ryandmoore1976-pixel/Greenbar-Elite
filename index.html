@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#050a14">
+<title>Greenbar</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Satoshi:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050a14;
+  --g1: #0d1f3c;
+  --g2: #051a30;
+  --glass: rgba(255,255,255,0.04);
+  --glass-hover: rgba(255,255,255,0.07);
+  --border: rgba(255,255,255,0.08);
+  --border-bright: rgba(255,255,255,0.15);
+  --green: #00d68f;
+  --green2: #00b374;
+  --teal: #00c9b1;
+  --blue: #2979ff;
+  --red: #ff4757;
+  --amber: #ffa502;
+  --purple: #7c4dff;
+  --text: #eef2ff;
+  --muted: rgba(238,242,255,0.4);
+  --soft: rgba(238,242,255,0.65);
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; font-family: 'Satoshi', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+/* ── Mesh background ── */
+.mesh {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(0,214,143,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 80%, rgba(41,121,255,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(124,77,255,0.05) 0%, transparent 60%),
+    linear-gradient(160deg, #0d1f3c 0%, #050a14 50%, #061522 100%);
+}
+.mesh::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ── App shell ── */
+#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; max-width: 430px; margin: 0 auto; position: relative; z-index: 1; }
+.safe-top { height: var(--safe-t); }
+
+/* ── Header ── */
+.header {
+  padding: 12px 20px 10px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; z-index: 10;
+}
+.wordmark { font-family: 'Cabinet Grotesk', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: -1px; }
+.wordmark .green-part { color: var(--green); }
+.wordmark .bar-part { color: var(--text); }
+.hdr-right { display: flex; gap: 8px; align-items: center; }
+.hdr-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.fab {
+  width: 42px; height: 42px; border-radius: 14px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--green), var(--teal));
+  color: #050a14; font-size: 20px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,214,143,0.35), 0 0 0 1px rgba(0,214,143,0.2);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.fab:active { transform: scale(0.91); box-shadow: 0 2px 10px rgba(0,214,143,0.25); }
+#csv-input { display: none; }
+
+/* ── Content ── */
+.content { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; position: relative; }
+.content::-webkit-scrollbar { display: none; }
+
+/* ── Bottom nav ── */
+.bottom-nav {
+  display: flex;
+  background: rgba(5,10,20,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  padding-bottom: var(--safe-b);
+}
+.nav-btn {
+  flex: 1; padding: 11px 4px 9px; border: none; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: var(--muted); transition: color 0.2s; position: relative;
+}
+.nav-btn.active { color: var(--green); }
+.nav-btn.active::before {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 32px; height: 2px; border-radius: 0 0 4px 4px;
+  background: linear-gradient(90deg, var(--green), var(--teal));
+}
+.nav-icon { font-size: 21px; line-height: 1; }
+.nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.04em; }
+
+/* ── Screens ── */
+.screen { display: none; padding: 8px 16px 32px; }
+.screen.active { display: block; }
+@keyframes screenIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.screen.active { animation: screenIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+/* ── Glass card ── */
+.g-card {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.g-card:active { border-color: var(--border-bright); }
+
+/* ── Import hero ── */
+.import-wrap { padding: 16px 0 0; }
+.import-hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(145deg, rgba(0,214,143,0.08), rgba(41,121,255,0.06), rgba(124,77,255,0.04));
+  border: 1px solid rgba(0,214,143,0.2);
+  border-radius: 28px; padding: 40px 28px 36px; text-align: center;
+  margin-bottom: 16px;
+}
+.import-hero::before {
+  content: ''; position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+  width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,214,143,0.15) 0%, transparent 70%);
+}
+.hero-orb { font-size: 56px; display: block; margin-bottom: 18px; filter: drop-shadow(0 4px 20px rgba(0,214,143,0.4)); }
+.hero-title { font-family: 'Cabinet Grotesk', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 10px; }
+.hero-sub { font-size: 14px; color: var(--soft); line-height: 1.65; margin-bottom: 28px; }
+.btn-primary {
+  width: 100%; padding: 15px; border: none; cursor: pointer; border-radius: 16px;
+  background: linear-gradient(135deg, var(--green), var(--teal));
+  color: #050a14; font-family: 'Cabinet Grotesk', sans-serif; font-size: 16px; font-weight: 800;
+  letter-spacing: 0.3px; display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 6px 28px rgba(0,214,143,0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-primary:active { transform: scale(0.97); }
+.rules-card { padding: 18px; margin-bottom: 12px; }
+.rules-title { font-family: 'Cabinet Grotesk', sans-serif; font-size: 12px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+.rule-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.rule-item:last-child { border-bottom: none; }
+.rule-pill { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 8px; background: rgba(0,214,143,0.12); color: var(--green); flex-shrink: 0; }
+.rule-text { color: var(--soft); }
+
+/* ── Month pills ── */
+.pills-row { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 14px; -webkit-overflow-scrolling: touch; }
+.pills-row::-webkit-scrollbar { display: none; }
+.pill {
+  flex-shrink: 0; padding: 7px 18px; border-radius: 22px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: 1px solid var(--border); color: var(--muted);
+  background: var(--glass); transition: all 0.2s; white-space: nowrap;
+  font-family: 'Cabinet Grotesk', sans-serif;
+}
+.pill.active {
+  background: linear-gradient(135deg, var(--green), var(--teal));
+  border-color: transparent; color: #050a14;
+  box-shadow: 0 3px 14px rgba(0,214,143,0.35);
+}
+
+/* ── Net hero card ── */
+.net-card {
+  position: relative; overflow: hidden; text-align: center;
+  padding: 32px 24px 28px; margin-bottom: 14px;
+  background: linear-gradient(145deg, rgba(13,31,60,0.9), rgba(5,26,48,0.9));
+  border: 1px solid var(--border); border-radius: 28px;
+}
+.net-card::before {
+  content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+  width: 260px; height: 200px;
+  background: radial-gradient(ellipse, rgba(0,214,143,0.12) 0%, transparent 65%);
+}
+.net-card .pulse {
+  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+  width: 80px; height: 2px; border-radius: 0 0 8px 8px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+}
+.net-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; margin-bottom: 10px; }
+.net-amt { font-family: 'Cabinet Grotesk', sans-serif; font-size: 52px; font-weight: 900; line-height: 1; margin-bottom: 8px; letter-spacing: -2px; }
+.net-mo { font-size: 13px; color: var(--muted); }
+.surplus { color: var(--green); text-shadow: 0 0 30px rgba(0,214,143,0.4); }
+.deficit { color: var(--red); text-shadow: 0 0 30px rgba(255,71,87,0.3); }
+
+/* ── Stat row ── */
+.stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.stat-tile {
+  padding: 14px 12px; border-radius: 18px; text-align: center;
+  background: var(--glass); border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+.stat-tile:active { border-color: var(--border-bright); }
+.st-lbl { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+.st-val { font-family: 'Cabinet Grotesk', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: -0.5px; }
+.c-green { color: var(--green); }
+.c-red   { color: var(--red); }
+.c-teal  { color: var(--teal); }
+
+/* ── Section header ── */
+.sec-hdr { font-family: 'Cabinet Grotesk', sans-serif; font-size: 13px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin: 22px 0 10px; display: flex; align-items: center; justify-content: space-between; }
+.sec-total { font-size: 13px; font-weight: 700; color: var(--soft); letter-spacing: 0; text-transform: none; }
+
+/* ── Category list ── */
+.cat-list { border-radius: 20px; overflow: hidden; background: var(--glass); border: 1px solid var(--border); margin-bottom: 12px; }
+.cat-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.cat-item:last-child { border-bottom: none; }
+.cat-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.cat-body { flex: 1; min-width: 0; }
+.cat-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
+.cat-bar-bg { height: 3px; background: rgba(255,255,255,0.07); border-radius: 3px; }
+.cat-bar-fg { height: 3px; border-radius: 3px; transition: width 0.6s cubic-bezier(0.34,1.2,0.64,1); }
+.cat-right { text-align: right; flex-shrink: 0; }
+.cat-amt { font-family: 'Cabinet Grotesk', sans-serif; font-size: 15px; font-weight: 800; }
+.cat-pct { font-size: 10px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+
+/* ── Budget table ── */
+.bva-card { border-radius: 20px; overflow: hidden; background: var(--glass); border: 1px solid var(--border); margin-bottom: 12px; }
+.bva-head { display: grid; grid-template-columns: 1fr 72px 72px 60px; gap: 4px; padding: 10px 16px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); }
+.bva-head span { font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.bva-head span:not(:first-child) { text-align: right; }
+.bva-row { display: grid; grid-template-columns: 1fr 72px 72px 60px; gap: 4px; padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); align-items: center; }
+.bva-row:last-child { border-bottom: none; }
+.bva-cat { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bva-num { font-size: 12px; font-weight: 700; text-align: right; }
+.v-over  { color: var(--red); }
+.v-under { color: var(--green); }
+.v-flat  { color: var(--muted); }
+
+/* ── Search ── */
+.search-wrap { position: relative; margin-bottom: 14px; }
+.search-wrap input {
+  width: 100%; padding: 12px 16px 12px 44px;
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 16px; color: var(--text); font-size: 14px;
+  font-family: 'Satoshi', sans-serif; outline: none;
+  transition: border-color 0.2s;
+}
+.search-wrap input:focus { border-color: rgba(0,214,143,0.4); }
+.search-wrap input::placeholder { color: var(--muted); }
+.search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 17px; }
+
+/* ── Transactions ── */
+.tx-date-hdr { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 4px 6px; font-family: 'Cabinet Grotesk', sans-serif; }
+.tx-group { border-radius: 20px; overflow: hidden; background: var(--glass); border: 1px solid var(--border); margin-bottom: 10px; }
+.tx-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+.tx-item:last-child { border-bottom: none; }
+.tx-item:active { background: rgba(255,255,255,0.03); }
+.tx-ic { width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.tx-bd { flex: 1; min-width: 0; }
+.tx-desc { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tx-cat { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+.tx-amt { font-family: 'Cabinet Grotesk', sans-serif; font-size: 16px; font-weight: 800; flex-shrink: 0; }
+.tx-amt.neg { color: var(--red); }
+.tx-amt.pos { color: var(--green); }
+
+/* ── Insights ── */
+.ins-card { padding: 20px; border-radius: 20px; background: var(--glass); border: 1px solid var(--border); margin-bottom: 12px; position: relative; overflow: hidden; }
+.ins-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--border-bright), transparent); }
+.ins-tag { font-size: 10px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; font-family: 'Cabinet Grotesk', sans-serif; }
+.ins-num { font-family: 'Cabinet Grotesk', sans-serif; font-size: 34px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px; line-height: 1; }
+.ins-desc { font-size: 13px; color: var(--soft); line-height: 1.6; }
+.mo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.mo-tile { padding: 16px; border-radius: 18px; background: var(--glass); border: 1px solid var(--border); }
+.mo-label { font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Cabinet Grotesk', sans-serif; }
+.mo-net { font-family: 'Cabinet Grotesk', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: -0.5px; }
+.mo-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+/* ── Settings ── */
+.settings-section { border-radius: 20px; overflow: hidden; background: var(--glass); border: 1px solid var(--border); margin-bottom: 14px; }
+.settings-hdr { padding: 12px 16px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); font-family: 'Cabinet Grotesk', sans-serif; font-size: 11px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; }
+.settings-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); cursor: pointer; transition: background 0.15s; }
+.settings-row:last-child { border-bottom: none; }
+.settings-row:active { background: rgba(255,255,255,0.03); }
+.s-icon { font-size: 20px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border-radius: 10px; flex-shrink: 0; }
+.s-body { flex: 1; }
+.s-label { font-size: 14px; font-weight: 600; }
+.s-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.s-arrow { color: var(--muted); font-size: 18px; }
+.budget-row { display: flex; align-items: center; padding: 11px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.budget-row:last-child { border-bottom: none; }
+.budget-label { flex: 1; font-size: 13px; color: var(--soft); }
+.budget-input { background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 10px; padding: 7px 10px; color: var(--text); font-size: 13px; font-family: 'Satoshi', sans-serif; width: 88px; text-align: right; outline: none; transition: border-color 0.2s; }
+.budget-input:focus { border-color: rgba(0,214,143,0.5); }
+.btn-secondary { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 16px; background: var(--glass); color: var(--soft); font-family: 'Cabinet Grotesk', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: border-color 0.2s; }
+.btn-secondary:active { border-color: var(--border-bright); }
+
+/* ── Modals ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 200; align-items: flex-end; justify-content: center; }
+.modal-overlay.open { display: flex; animation: fadeIn 0.2s ease both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-sheet {
+  background: #0c1628; border: 1px solid var(--border); border-radius: 28px 28px 0 0;
+  padding: 20px 20px 40px; width: 100%; max-width: 430px; max-height: 88vh; overflow-y: auto;
+  animation: sheetUp 0.35s cubic-bezier(0.34,1.2,0.64,1) both;
+}
+@keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-handle { width: 36px; height: 4px; background: var(--border-bright); border-radius: 2px; margin: 0 auto 20px; }
+.modal-title { font-family: 'Cabinet Grotesk', sans-serif; font-size: 20px; font-weight: 900; margin-bottom: 6px; }
+.modal-sub { font-size: 13px; color: var(--soft); margin-bottom: 20px; line-height: 1.5; }
+.modal-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-family: 'Cabinet Grotesk', sans-serif; }
+.modal-input { width: 100%; background: var(--glass); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; color: var(--text); font-size: 14px; font-family: 'Satoshi', sans-serif; outline: none; margin-bottom: 12px; transition: border-color 0.2s; }
+.modal-input:focus { border-color: rgba(0,214,143,0.4); }
+.remap-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.remap-row input { flex: 1; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; color: var(--text); font-size: 13px; font-family: 'Satoshi', sans-serif; outline: none; }
+.remap-row input:focus { border-color: rgba(0,214,143,0.4); }
+.del-btn { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,71,87,0.12); border: none; color: var(--red); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.add-btn { width: 100%; padding: 11px; background: rgba(0,214,143,0.08); border: 1px dashed rgba(0,214,143,0.3); border-radius: 14px; color: var(--green); font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Satoshi', sans-serif; margin-bottom: 12px; transition: background 0.2s; }
+.add-btn:active { background: rgba(0,214,143,0.14); }
+
+/* ── Empty ── */
+.empty { text-align: center; padding: 70px 20px; }
+.empty-icon { font-size: 44px; margin-bottom: 14px; filter: grayscale(0.3); }
+.empty p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+* { scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+
+.app-preview { margin:12px 0 14px; background:linear-gradient(155deg,#0b1628 0%,#06101e 100%); border:1px solid rgba(0,214,143,0.20); border-radius:26px; padding:16px 16px 18px; position:relative; overflow:hidden; }
+.ap-glow { position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:260px; height:180px; background:radial-gradient(ellipse,rgba(0,214,143,0.09) 0%,transparent 70%); pointer-events:none; }
+.ap-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.ap-wordmark { font-family:'Cabinet Grotesk',sans-serif; font-size:17px; font-weight:900; letter-spacing:-0.5px; }
+.ap-g { color:#00d68f; }
+.ap-icon-btn { width:28px; height:28px; border-radius:9px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.09); display:flex; align-items:center; justify-content:center; font-size:13px; color:rgba(238,242,255,0.5); }
+.ap-fab { width:30px; height:30px; border-radius:10px; background:linear-gradient(135deg,#00d68f,#00c9b1); display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:700; color:#050a14; }
+.ap-pills { display:flex; gap:6px; margin-bottom:12px; }
+.ap-pill { padding:4px 12px; border-radius:20px; font-size:10px; font-weight:600; font-family:'Cabinet Grotesk',sans-serif; border:1px solid rgba(255,255,255,0.08); color:rgba(238,242,255,0.35); background:rgba(255,255,255,0.04); }
+.ap-pill.active { background:linear-gradient(135deg,#00d68f,#00c9b1); border-color:transparent; color:#050a14; box-shadow:0 2px 10px rgba(0,214,143,0.3); }
+.ap-net-card { background:linear-gradient(145deg,#0e2040,#081728); border:1px solid rgba(255,255,255,0.07); border-radius:18px; padding:16px; margin-bottom:12px; position:relative; overflow:hidden; }
+.ap-net-glow { position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:180px; height:120px; background:radial-gradient(ellipse,rgba(0,214,143,0.10) 0%,transparent 70%); pointer-events:none; }
+.ap-net-pulse { position:absolute; top:0; left:20%; right:20%; height:1px; background:linear-gradient(90deg,transparent,rgba(0,214,143,0.45),transparent); }
+.ap-net-lbl { font-size:9px; color:rgba(238,242,255,0.4); text-transform:uppercase; letter-spacing:0.1em; font-weight:600; margin-bottom:3px; }
+.ap-net-amt { font-family:'Cabinet Grotesk',sans-serif; font-size:32px; font-weight:900; letter-spacing:-1px; color:#00d68f; line-height:1; margin-bottom:2px; }
+.ap-net-sub { font-size:10px; color:rgba(238,242,255,0.38); margin-bottom:12px; }
+.ap-ie-row { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+.ap-ie-tile { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:8px 10px; }
+.ap-ie-lbl { font-size:9px; color:rgba(238,242,255,0.38); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; margin-bottom:3px; }
+.ap-ie-val { font-family:'Cabinet Grotesk',sans-serif; font-size:13px; font-weight:900; letter-spacing:-0.3px; }
+.ap-bars-hdr { font-size:9px; color:rgba(238,242,255,0.38); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; margin-bottom:8px; }
+.ap-bars-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:4px 0; margin-bottom:14px; }
+.ap-bar-item { display:flex; align-items:center; gap:8px; padding:7px 12px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.ap-bar-ic { width:22px; height:22px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; }
+.ap-bar-name { font-size:10px; font-weight:500; flex:0 0 58px; color:rgba(238,242,255,0.65); }
+.ap-bar-bg { flex:1; height:3px; background:rgba(255,255,255,0.07); border-radius:3px; }
+.ap-bar-fg { height:3px; border-radius:3px; animation:apBarGrow 0.9s cubic-bezier(0.34,1.2,0.64,1) both; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes apBarGrow { from { width:0 !important; } }
+.ap-bar-amt { font-size:10px; font-weight:700; flex:0 0 36px; text-align:right; font-family:'Cabinet Grotesk',sans-serif; }
+
+/* ── Welcome screen ── */
+.gb-welcome { padding: 16px 0 8px; }
+.gb-brand-wrap { text-align: center; padding: 28px 20px 24px; background: linear-gradient(155deg, rgba(0,214,143,0.06) 0%, rgba(41,121,255,0.04) 50%, rgba(124,77,255,0.03) 100%); border: 1px solid rgba(0,214,143,0.15); border-radius: 28px; margin-bottom: 14px; position: relative; overflow: hidden; }
+.gb-brand-glow { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 300px; height: 200px; background: radial-gradient(ellipse, rgba(0,214,143,0.10) 0%, transparent 70%); pointer-events: none; }
+.gb-logo-svg { width: 100%; max-width: 280px; height: 120px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
+.gb-brand-name { font-family: 'Cabinet Grotesk', sans-serif; font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1; margin-bottom: 8px; }
+.gb-brand-green { color: #00d68f; }
+.gb-brand-tagline { font-size: 14px; color: var(--soft); letter-spacing: 0.02em; }
+.gb-feature-list { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-bottom: 14px; }
+.gb-feature-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.gb-feature-icon { font-size: 20px; width: 38px; height: 38px; border-radius: 12px; background: rgba(0,214,143,0.08); border: 1px solid rgba(0,214,143,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.gb-feature-body { flex: 1; }
+.gb-feature-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.gb-feature-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="mesh"></div>
+<div id="app">
+  <div class="safe-top"></div>
+
+  <div class="header">
+    <div>
+      <div class="wordmark"><span class="green-part">Green</span><span class="bar-part">bar</span></div>
+      <div class="hdr-sub" id="hdr-sub">Personal Finance</div>
+    </div>
+    <div class="hdr-right">
+      <button class="fab" style="background:var(--glass);border:1px solid var(--border);color:var(--muted);box-shadow:none;font-size:17px;" onclick="showScreen('settings',document.querySelectorAll('.nav-btn')[3])">⚙</button>
+      <button class="fab" id="log-btn" style="background:var(--glass);border:1px solid var(--border);color:var(--muted);box-shadow:none;font-size:16px;position:relative;" onclick="openModal('modal-log')" title="Upload Log">🗂<span id="log-badge" style="display:none;position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--green);color:#050a14;font-size:9px;font-weight:800;line-height:16px;text-align:center;"></span></button>
+      <button class="fab" onclick="document.getElementById('csv-input').click()" style="width:auto;padding:0 16px;font-size:13px;font-weight:800;font-family:'Cabinet Grotesk',sans-serif;letter-spacing:0.3px;color:#050a14;background:linear-gradient(135deg,#00d68f,#00c9b1);box-shadow:0 4px 16px rgba(0,214,143,0.4);">Import</button>
+      <input type="file" id="csv-input" accept=".csv" onchange="handleFile(this.files[0])">
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- SUMMARY -->
+    <div class="screen active" id="screen-summary">
+      <div id="summary-content">
+        <div class="gb-welcome">
+
+          <!-- Greenbar brand graphic -->
+          <div class="gb-brand-wrap">
+            <div class="gb-brand-glow"></div>
+            <svg class="gb-logo-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+              <!-- Animated bar chart -->
+              <rect x="20" y="110" width="28" height="50" rx="6" fill="url(#barGrad1)" opacity="0.9">
+                <animate attributeName="height" values="10;50;50" dur="1s" begin="0s" fill="freeze"/>
+                <animate attributeName="y" values="150;110;110" dur="1s" begin="0s" fill="freeze"/>
+              </rect>
+              <rect x="56" y="80" width="28" height="80" rx="6" fill="url(#barGrad1)" opacity="0.95">
+                <animate attributeName="height" values="10;80;80" dur="1s" begin="0.1s" fill="freeze"/>
+                <animate attributeName="y" values="150;80;80" dur="1s" begin="0.1s" fill="freeze"/>
+              </rect>
+              <rect x="92" y="50" width="28" height="110" rx="6" fill="url(#barGrad1)">
+                <animate attributeName="height" values="10;110;110" dur="1s" begin="0.2s" fill="freeze"/>
+                <animate attributeName="y" values="150;50;50" dur="1s" begin="0.2s" fill="freeze"/>
+              </rect>
+              <rect x="128" y="70" width="28" height="90" rx="6" fill="url(#barGrad2)" opacity="0.85">
+                <animate attributeName="height" values="10;90;90" dur="1s" begin="0.3s" fill="freeze"/>
+                <animate attributeName="y" values="150;70;70" dur="1s" begin="0.3s" fill="freeze"/>
+              </rect>
+              <rect x="164" y="90" width="28" height="70" rx="6" fill="url(#barGrad2)" opacity="0.8">
+                <animate attributeName="height" values="10;70;70" dur="1s" begin="0.4s" fill="freeze"/>
+                <animate attributeName="y" values="150;90;90" dur="1s" begin="0.4s" fill="freeze"/>
+              </rect>
+              <rect x="200" y="60" width="28" height="100" rx="6" fill="url(#barGrad1)" opacity="0.9">
+                <animate attributeName="height" values="10;100;100" dur="1s" begin="0.5s" fill="freeze"/>
+                <animate attributeName="y" values="150;60;60" dur="1s" begin="0.5s" fill="freeze"/>
+              </rect>
+              <rect x="236" y="40" width="28" height="120" rx="6" fill="url(#barGrad1)">
+                <animate attributeName="height" values="10;120;120" dur="1s" begin="0.6s" fill="freeze"/>
+                <animate attributeName="y" values="150;40;40" dur="1s" begin="0.6s" fill="freeze"/>
+              </rect>
+              <!-- Baseline -->
+              <rect x="10" y="161" width="260" height="2" rx="1" fill="rgba(255,255,255,0.1)"/>
+              <!-- Trend line -->
+              <polyline points="34,110 70,80 106,50 142,70 178,90 214,60 250,40"
+                stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+              <defs>
+                <linearGradient id="barGrad1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00d68f"/>
+                  <stop offset="100%" stop-color="#00a86b" stop-opacity="0.7"/>
+                </linearGradient>
+                <linearGradient id="barGrad2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00c9b1"/>
+                  <stop offset="100%" stop-color="#0099a0" stop-opacity="0.7"/>
+                </linearGradient>
+              </defs>
+            </svg>
+
+            <div class="gb-brand-name"><span class="gb-brand-green">Green</span>bar</div>
+            <div class="gb-brand-tagline">Your money, clearly.</div>
+          </div>
+
+          <!-- Feature list -->
+          <div class="gb-feature-list">
+            <div class="gb-feature-item">
+              <div class="gb-feature-icon">📊</div>
+              <div class="gb-feature-body">
+                <div class="gb-feature-title">Instant spending breakdown</div>
+                <div class="gb-feature-desc">See exactly where your money goes, by category and vendor</div>
+              </div>
+            </div>
+            <div class="gb-feature-item">
+              <div class="gb-feature-icon">🎯</div>
+              <div class="gb-feature-body">
+                <div class="gb-feature-title">Budget vs actual tracking</div>
+                <div class="gb-feature-desc">Set monthly targets and track variance in real time</div>
+              </div>
+            </div>
+            <div class="gb-feature-item">
+              <div class="gb-feature-icon">✦</div>
+              <div class="gb-feature-body">
+                <div class="gb-feature-title">Smart insights per category</div>
+                <div class="gb-feature-desc">Trends, top vendors, and observations automatically generated</div>
+              </div>
+            </div>
+            <div class="gb-feature-item" style="border-bottom:none">
+              <div class="gb-feature-icon">🔒</div>
+              <div class="gb-feature-body">
+                <div class="gb-feature-title">100% private</div>
+                <div class="gb-feature-desc">Your data never leaves your device — ever</div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="document.getElementById('csv-input').click()">⬆ &nbsp;Import Transactions to Get Started</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUDGET -->
+    <div class="screen" id="screen-budget">
+      <div id="budget-content"><div class="empty"><div class="empty-icon">📋</div><p>Import a CSV to see budget vs actual</p></div></div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="screen" id="screen-txs">
+      <div id="txs-content"><div class="empty"><div class="empty-icon">💳</div><p>Import a CSV to browse transactions</p></div></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="screen" id="screen-settings">
+      <div class="sec-hdr" style="margin-top:8px">CSV Format</div>
+      <div class="settings-section">
+        <div class="settings-row" onclick="openModal('modal-cols')">
+          <div class="s-icon">📋</div>
+          <div class="s-body"><div class="s-label">Column Mapping</div><div class="s-desc" id="col-desc">Map Date, Description, Amount columns</div></div>
+          <span class="s-arrow">›</span>
+        </div>
+        <div class="settings-row" onclick="openModal('modal-income')">
+          <div class="s-icon">✅</div>
+          <div class="s-body"><div class="s-label">Income Keywords</div><div class="s-desc" id="inc-desc">Words that identify deposits</div></div>
+          <span class="s-arrow">›</span>
+        </div>
+        <div class="settings-row" onclick="openModal('modal-skip')">
+          <div class="s-icon">🚫</div>
+          <div class="s-body"><div class="s-label">Skip Transactions</div><div class="s-desc" id="skip-desc">Exclude savings transfers etc.</div></div>
+          <span class="s-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="sec-hdr">Reclassification Rules</div>
+      <div class="settings-section">
+        <div class="settings-row" onclick="openModal('modal-remaps')">
+          <div class="s-icon">🔀</div>
+          <div class="s-body"><div class="s-label">Category Remaps</div><div class="s-desc" id="remap-desc">Merchant → category rules</div></div>
+          <span class="s-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="sec-hdr">Monthly Budget Targets</div>
+      <div class="settings-section" id="budget-inputs"></div>
+
+      <div style="padding:4px 0 0">
+        <button class="btn-primary" onclick="saveSettings();showScreen('summary',document.querySelectorAll('.nav-btn')[0])">✓ &nbsp;Save & Apply</button>
+        <button class="btn-secondary" onclick="resetSettings()">↺ Reset to Defaults</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="showScreen('summary',this)"><span class="nav-icon">◎</span><span class="nav-label">Summary</span></button>
+    <button class="nav-btn" onclick="showScreen('budget',this)"><span class="nav-icon">◈</span><span class="nav-label">Budget</span></button>
+    <button class="nav-btn" onclick="showScreen('txs',this)"><span class="nav-icon">◷</span><span class="nav-label">Transactions</span></button>
+    <button class="nav-btn" onclick="showScreen('settings',this)"><span class="nav-icon">⚙</span><span class="nav-label">Settings</span></button>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-cols" onclick="closeOut(event,'modal-cols')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Column Mapping</div>
+    <div class="modal-sub">Enter exact column headers from your bank's CSV. Leave blank to auto-detect.</div>
+    <div class="modal-label">Date Column</div><input class="modal-input" id="col-date" placeholder="e.g. Date, Transaction Date">
+    <div class="modal-label">Description Column</div><input class="modal-input" id="col-desc-inp" placeholder="e.g. Description, Merchant">
+    <div class="modal-label">Amount Column</div><input class="modal-input" id="col-amt" placeholder="e.g. Amount">
+    <div class="modal-label">Category Column (optional)</div><input class="modal-input" id="col-cat" placeholder="e.g. Category">
+    <div class="modal-label">Date Format</div>
+    <select class="modal-input" id="col-fmt" style="appearance:none">
+      <option value="MM/DD/YY">MM/DD/YY  (05/04/26)</option>
+      <option value="MM/DD/YYYY">MM/DD/YYYY  (05/04/2026)</option>
+      <option value="YYYY-MM-DD">YYYY-MM-DD  (2026-05-04)</option>
+      <option value="DD/MM/YYYY">DD/MM/YYYY  (04/05/2026)</option>
+    </select>
+    <button class="btn-primary" onclick="saveCols();closeModal('modal-cols')">Save</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-income" onclick="closeOut(event,'modal-income')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Income Keywords</div>
+    <div class="modal-sub">Transactions containing these words are counted as income. One per line, case-insensitive.</div>
+    <textarea class="modal-input" id="income-kw" rows="9" style="resize:none;line-height:1.9" placeholder="PAYROLL&#10;DIRECT DEPOSIT&#10;SALARY&#10;TAX REFUND&#10;CASHOUT&#10;MOBILE DEPOSIT"></textarea>
+    <button class="btn-primary" onclick="saveIncome();closeModal('modal-income')">Save</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-skip" onclick="closeOut(event,'modal-skip')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Skip Transactions</div>
+    <div class="modal-sub">Transactions containing these words are excluded entirely. One per line.</div>
+    <textarea class="modal-input" id="skip-kw" rows="7" style="resize:none;line-height:1.9" placeholder="TRANSFER TO SAVINGS&#10;INTERNAL TRANSFER"></textarea>
+    <button class="btn-primary" onclick="saveSkip();closeModal('modal-skip')">Save</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-remaps" onclick="closeOut(event,'modal-remaps')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Category Remaps</div>
+    <div class="modal-sub">If description contains keyword → assign category. Case-insensitive.</div>
+    <div id="remap-list"></div>
+    <button class="add-btn" onclick="addRemap()">+ Add Rule</button>
+    <button class="btn-primary" onclick="saveRemaps();closeModal('modal-remaps')">Save Rules</button>
+  </div>
+</div>
+
+<script>
+// ════ DEFAULTS ════
+const DEFAULTS = {
+  cols:{ date:'',desc:'',amt:'',cat:'',fmt:'MM/DD/YY' },
+  incomeKw:['PAYROLL','DIRECT DEPOSIT','SALARY','TAX REFUND','CASHOUT','MOBILE DEPOSIT','ZELLE FROM','VENMO CASHOUT'],
+  skipKw:[],
+  remaps:[
+    {kw:'WALMART',cat:'Groceries'},{kw:'COSTCO',cat:'Groceries'},
+    {kw:'MCDONALD',cat:'Fast Food'},{kw:'CHIPOTLE',cat:'Fast Food'},
+    {kw:'STARBUCKS',cat:'Coffee'},{kw:'AMAZON',cat:'Online Shopping'},
+    {kw:'NETFLIX',cat:'Subscriptions'},{kw:'SPOTIFY',cat:'Subscriptions'},
+    {kw:'APPLE.COM',cat:'Subscriptions'},{kw:'UBER',cat:'Transport'},
+    {kw:'LYFT',cat:'Transport'},{kw:'SHELL',cat:'Gas/Fuel'},
+    {kw:'CHEVRON',cat:'Gas/Fuel'},{kw:'EXXON',cat:'Gas/Fuel'},
+  ],
+  budget:{
+    'Groceries':600,'Dining Out':400,'Fast Food':100,'Coffee':60,
+    'Gas/Fuel':200,'Transport':100,'Subscriptions':50,'Online Shopping':100,
+    'Utilities':150,'Insurance':200,'Rent/Mortgage':1500,'Entertainment':100,
+    'Personal Care':100,'Clothing':100,'Healthcare':80,'Pets':50,'Other':200,
+  }
+};
+
+let CFG = JSON.parse(JSON.stringify(DEFAULTS));
+function loadCFG(){ try{ const s=localStorage.getItem('gb_cfg2'); if(s) CFG=JSON.parse(s); }catch(e){} syncUI(); renderBudgetInputs(); }
+function saveCFG(){ try{ localStorage.setItem('gb_cfg2',JSON.stringify(CFG)); }catch(e){} }
+function resetSettings(){ if(!confirm('Reset all settings?')) return; CFG=JSON.parse(JSON.stringify(DEFAULTS)); saveCFG(); syncUI(); renderBudgetInputs(); }
+
+function syncUI(){
+  document.getElementById('col-date').value=CFG.cols.date||'';
+  document.getElementById('col-desc-inp').value=CFG.cols.desc||'';
+  document.getElementById('col-amt').value=CFG.cols.amt||'';
+  document.getElementById('col-cat').value=CFG.cols.cat||'';
+  document.getElementById('col-fmt').value=CFG.cols.fmt||'MM/DD/YY';
+  document.getElementById('income-kw').value=CFG.incomeKw.join('\n');
+  document.getElementById('skip-kw').value=CFG.skipKw.join('\n');
+  document.getElementById('inc-desc').textContent=`${CFG.incomeKw.length} keywords`;
+  document.getElementById('skip-desc').textContent=CFG.skipKw.length?`${CFG.skipKw.length} rules`:'None set';
+  document.getElementById('remap-desc').textContent=`${CFG.remaps.length} rules active`;
+}
+function saveCols(){ CFG.cols={date:document.getElementById('col-date').value.trim(),desc:document.getElementById('col-desc-inp').value.trim(),amt:document.getElementById('col-amt').value.trim(),cat:document.getElementById('col-cat').value.trim(),fmt:document.getElementById('col-fmt').value}; }
+function saveIncome(){ CFG.incomeKw=document.getElementById('income-kw').value.split('\n').map(s=>s.trim().toUpperCase()).filter(Boolean); document.getElementById('inc-desc').textContent=`${CFG.incomeKw.length} keywords`; }
+function saveSkip(){ CFG.skipKw=document.getElementById('skip-kw').value.split('\n').map(s=>s.trim().toUpperCase()).filter(Boolean); document.getElementById('skip-desc').textContent=CFG.skipKw.length?`${CFG.skipKw.length} rules`:'None set'; }
+function saveRemaps(){ CFG.remaps=[]; document.querySelectorAll('.remap-row').forEach(r=>{ const k=r.querySelector('.rk').value.trim().toUpperCase(); const c=r.querySelector('.rc').value.trim(); if(k&&c) CFG.remaps.push({kw:k,cat:c}); }); document.getElementById('remap-desc').textContent=`${CFG.remaps.length} rules active`; }
+function renderRemaps(){ document.getElementById('remap-list').innerHTML=(CFG.remaps||[]).map(r=>`<div class="remap-row"><input class="rk" placeholder="Keyword" value="${r.kw||''}"><input class="rc" placeholder="Category" value="${r.cat||''}"><button class="del-btn" onclick="this.parentElement.remove()">×</button></div>`).join(''); }
+function addRemap(){ const d=document.createElement('div'); d.className='remap-row'; d.innerHTML=`<input class="rk" placeholder="Keyword"><input class="rc" placeholder="Category"><button class="del-btn" onclick="this.parentElement.remove()">×</button>`; document.getElementById('remap-list').appendChild(d); }
+function renderBudgetInputs(){ document.getElementById('budget-inputs').innerHTML=Object.entries(CFG.budget).map(([c,v])=>`<div class="budget-row"><span class="budget-label">${c}</span><input class="budget-input" type="number" data-cat="${c}" value="${v}" min="0" step="10"></div>`).join('')+`<div class="budget-row"><input class="budget-input" id="new-cat" placeholder="New category…" style="width:auto;flex:1;margin-right:8px;text-align:left"><input class="budget-input" id="new-val" type="number" placeholder="$0" style="width:72px"><button onclick="addBudgetCat()" style="margin-left:8px;padding:7px 12px;background:rgba(0,214,143,0.1);border:1px solid rgba(0,214,143,0.3);border-radius:10px;color:var(--green);font-weight:700;cursor:pointer;font-size:14px">+</button></div>`; }
+function addBudgetCat(){ const n=document.getElementById('new-cat').value.trim(); const v=parseFloat(document.getElementById('new-val').value)||0; if(!n) return; CFG.budget[n]=v; renderBudgetInputs(); }
+function saveSettings(){ document.querySelectorAll('.budget-input[data-cat]').forEach(i=>{ if(i.dataset.cat) CFG.budget[i.dataset.cat]=parseFloat(i.value)||0; }); saveCFG(); if(_allTxs.length) renderAll(); }
+
+// ════ CSV ════
+const MN='Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec'.split(',');
+function parseCSV(text){ const lines=text.trim().split('\n'); const h=parseL(lines[0]); return{headers:h,rows:lines.slice(1).filter(l=>l.trim()).map(l=>{ const v=parseL(l); const o={}; h.forEach((k,i)=>o[k.trim()]=(v[i]||'').trim()); return o; })}; }
+function parseL(line){ const r=[];let cur='',inQ=false; for(let i=0;i<line.length;i++){ const c=line[i]; if(c==='"'){inQ=!inQ;}else if(c===','&&!inQ){r.push(cur);cur='';}else cur+=c; } r.push(cur); return r; }
+function parseAmt(s){ if(!s)return 0; const c=s.replace(/[",\$ ]/g,''); const neg=c.startsWith('-')||c.startsWith('('); return neg?-parseFloat(c.replace(/[^0-9.]/g,'')):parseFloat(c.replace(/[^0-9.]/g,'')); }
+function autoCol(headers,candidates){ for(const c of candidates){ const f=headers.find(h=>h.toLowerCase().includes(c.toLowerCase())); if(f) return f; } return headers[0]; }
+function parseDate(str,fmt){ if(!str)return null; const s=str.replace(/[^0-9\/\-]/g,''); const p=s.split(/[\/\-]/); if(!p||p.length<3) return null; let m,d,y; if(fmt==='YYYY-MM-DD'){[y,m,d]=p;}else if(fmt==='DD/MM/YYYY'){[d,m,y]=p;}else{[m,d,y]=p;} if(y&&y.length===2)y='20'+y; const mi=parseInt(m)-1; if(mi<0||mi>11)return null; return`${MN[mi]} ${y}`; }
+
+function processCSV(rows,headers){
+  const colDate=CFG.cols.date||autoCol(headers,['date','posted','transaction date']);
+  const colDesc=CFG.cols.desc||autoCol(headers,['description','merchant','memo','payee']);
+  const colAmt=CFG.cols.amt||autoCol(headers,['amount','transaction amount']);
+  const colCat=CFG.cols.cat||autoCol(headers,['category','type']);
+  const fmt=CFG.cols.fmt||'MM/DD/YY';
+  const txs=[];
+  for(const row of rows){
+    const raw=row[colDesc]||''; const desc=raw.toUpperCase();
+    const amount=parseAmt(row[colAmt]||'0');
+    const month=parseDate(row[colDate]||'',fmt);
+    if(!month) continue;
+    if(CFG.skipKw.some(kw=>desc.includes(kw))) continue;
+    let cat=(row[colCat]||'Uncategorized').trim();
+    let isIncome=amount>0;
+    if(CFG.incomeKw.some(kw=>desc.includes(kw))){isIncome=true;cat='_income';}
+    else{ for(const r of CFG.remaps){ if(desc.includes(r.kw.toUpperCase())){cat=r.cat;break;} } }
+    txs.push({date:row[colDate]||'',month,desc:raw,amount,cat,isIncome});
+  }
+  return txs;
+}
+
+function aggregate(txs){ const mo={}; for(const tx of txs){ if(!mo[tx.month])mo[tx.month]={income:0,expenses:{},txs:[]}; mo[tx.month].txs.push(tx); if(tx.isIncome||tx.amount>0)mo[tx.month].income+=tx.amount; else mo[tx.month].expenses[tx.cat]=(mo[tx.month].expenses[tx.cat]||0)+Math.abs(tx.amount); } return mo; }
+function sortKeys(mo){ return Object.keys(mo).sort((a,b)=>{ const[am,ay]=a.split(' '),[bm,by]=b.split(' '); return parseInt(ay)!==parseInt(by)?parseInt(ay)-parseInt(by):MN.indexOf(am)-MN.indexOf(bm); }); }
+
+let _months={},_allTxs=[],_sel=null;
+
+// ════ PERSISTENCE ════
+function saveData(){
+  try{
+    const payload={months:_months,txs:_allTxs,sel:_sel};
+    localStorage.setItem('gb_data',JSON.stringify(payload));
+  }catch(e){ console.warn('Save failed (storage full?)'); }
+}
+function loadData(){
+  try{
+    const s=localStorage.getItem('gb_data');
+    if(!s) return false;
+    const d=JSON.parse(s);
+    _months=d.months||{}; _allTxs=d.txs||[]; _sel=d.sel||null;
+    return Object.keys(_months).length>0;
+  }catch(e){ return false; }
+}
+
+// ════ UPLOAD LOG ════
+function getLog(){ try{ return JSON.parse(localStorage.getItem('gb_log')||'[]'); }catch(e){ return []; } }
+function saveLog(log){ try{ localStorage.setItem('gb_log',JSON.stringify(log)); }catch(e){} }
+function addToLog(filename, txCount, monthCount, months){
+  const log=getLog();
+  log.unshift({ id: Date.now(), filename, txCount, monthCount, months, date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}) });
+  if(log.length>50) log.pop(); // keep last 50
+  saveLog(log);
+  updateLogBadge();
+}
+function updateLogBadge(){
+  const log=getLog();
+  const badge=document.getElementById('log-badge');
+  if(!badge) return;
+  if(log.length>0){ badge.style.display='block'; badge.textContent=log.length>9?'9+':log.length; }
+  else { badge.style.display='none'; }
+}
+function clearLog(){
+  if(!confirm('Clear all upload history?')) return;
+  localStorage.removeItem('gb_log');
+  updateLogBadge();
+  renderLog();
+}
+function restoreFromLog(id){
+  closeModal('modal-log');
+  // Just prompt to re-import — we store metadata not raw CSV (too large)
+  alert('To restore this file, re-import the original CSV using the + button. Log entries are metadata only — raw CSV data is not stored to save space.');
+}
+function renderLog(){
+  const log=getLog();
+  const list=document.getElementById('log-list');
+  const empty=document.getElementById('log-empty');
+  if(!list) return;
+  if(log.length===0){ list.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  list.innerHTML=log.map(entry=>`
+    <div style="background:var(--glass);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:10px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;">
+        <div style="font-size:14px;font-weight:600;flex:1;word-break:break-all;">${entry.filename}</div>
+        <div style="font-size:11px;color:var(--muted);flex-shrink:0;margin-top:2px;">${entry.date}</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="background:rgba(0,214,143,0.10);border:1px solid rgba(0,214,143,0.2);border-radius:8px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--green)">${entry.txCount} transactions</span>
+        <span style="background:rgba(41,121,255,0.10);border:1px solid rgba(41,121,255,0.2);border-radius:8px;padding:3px 10px;font-size:11px;font-weight:600;color:#2979ff">${entry.monthCount} months</span>
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:3px 10px;font-size:11px;color:var(--muted)">${entry.months}</span>
+      </div>
+    </div>`).join('');
+}
+
+function viewInsights(){
+  // Re-check by loading from storage in case state wasn't hydrated yet
+  if(_allTxs.length===0) loadData();
+  if(_allTxs.length>0){
+    const keys=sortKeys(_months);
+    _sel='__all';
+    renderSummaryAll();
+    showScreen('summary',document.querySelectorAll('.nav-btn')[0]);
+  } else {
+    document.getElementById('csv-input').click();
+  }
+}
+
+function showCatInsights(cat){
+  if(!cat) return;
+
+  const monthFilter = (_sel && _sel !== '__all') ? _sel : null;
+  const txsForCat = _allTxs.filter(tx => tx.cat === cat && tx.amount < 0 && (!monthFilter || tx.month === monthFilter));
+  const total = txsForCat.reduce((s,tx)=>s+Math.abs(tx.amount),0);
+  const keys = sortKeys(_months);
+  const n = keys.length;
+  const avgMo = total / n;
+
+  // Build vendor breakdown for context
+  const byVendor = {};
+  for(const tx of txsForCat){
+    let v = tx.desc.replace(/^(Point Of Sale Withdrawal|External Withdrawal|NOW Withdrawal|NOW Deposit|Withdrawal|Deposit)\s*/i,'').replace(/\s{2,}/g,' ').trim();
+    if(v.length>40) v=v.substring(0,40).trim();
+    byVendor[v]=(byVendor[v]||0)+Math.abs(tx.amount);
+  }
+  const topVendors = Object.entries(byVendor).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const budget = CFG.budget[cat] || 0;
+
+  // Monthly breakdown
+  const byMonth = {};
+  for(const mk of keys){
+    byMonth[mk] = (_months[mk].expenses[cat]||0);
+  }
+
+  // Set header
+  document.getElementById('ins-cat-title').textContent = cat;
+  document.getElementById('ins-cat-icon').textContent = EMO[cat]||'📦';
+  document.getElementById('ins-cat-icon').style.background = PAL[Object.keys(EMO).indexOf(cat)%15]+'22';
+  document.getElementById('ins-cat-sub').textContent = `${txsForCat.length} transactions · ${fmt(total)} total`;
+  document.getElementById('ins-loading').style.display = 'block';
+  document.getElementById('ins-content').innerHTML = '';
+  openModal('modal-cat-insights');
+
+  // Build the local analysis (no API needed — fast, private)
+  const trend = keys.length >= 2
+    ? byMonth[keys[keys.length-1]] - byMonth[keys[0]]
+    : 0;
+  const trendDir = trend > 50 ? '↑ increasing' : trend < -50 ? '↓ decreasing' : '→ stable';
+  const trendColor = trend > 50 ? 'var(--red)' : trend < -50 ? 'var(--green)' : 'var(--muted)';
+  const highMonth = keys.reduce((b,k)=>byMonth[k]>byMonth[b]?k:b, keys[0]);
+  const lowMonth = keys.reduce((b,k)=>byMonth[k]<byMonth[b]&&byMonth[k]>0?k:b, keys[0]);
+  const vsBudget = budget > 0 ? ((avgMo - budget) / budget * 100).toFixed(0) : null;
+  const topVendor = topVendors[0];
+  const topVendorPct = topVendor ? (topVendor[1]/total*100).toFixed(0) : 0;
+
+  setTimeout(()=>{
+    document.getElementById('ins-loading').style.display = 'none';
+    document.getElementById('ins-content').innerHTML = `
+      <!-- Key metrics -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:12px 14px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;margin-bottom:4px;">Avg/month</div>
+          <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:20px;font-weight:900;">${fmt(avgMo)}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:12px 14px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;margin-bottom:4px;">Trend</div>
+          <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:20px;font-weight:900;color:${trendColor};">${trendDir}</div>
+        </div>
+        ${budget>0?`
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:12px 14px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;margin-bottom:4px;">Budget</div>
+          <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:20px;font-weight:900;">${fmt(budget)}/mo</div>
+        </div>
+        <div style="background:${parseFloat(vsBudget)>0?'rgba(255,71,87,0.1)':'rgba(0,214,143,0.1)'};border:1px solid ${parseFloat(vsBudget)>0?'rgba(255,71,87,0.2)':'rgba(0,214,143,0.2)'};border-radius:14px;padding:12px 14px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;margin-bottom:4px;">vs Budget</div>
+          <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:20px;font-weight:900;color:${parseFloat(vsBudget)>0?'var(--red)':'var(--green)'};">${parseFloat(vsBudget)>0?'+':''}${vsBudget}%</div>
+        </div>`:''}
+      </div>
+
+      <!-- Monthly trend chart -->
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:14px 16px;margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;font-family:'Cabinet Grotesk',sans-serif;">Month by Month</div>
+        ${keys.map(mk=>{
+          const amt=byMonth[mk];
+          const maxAmt=Math.max(...Object.values(byMonth))||1;
+          const barPct=Math.round(amt/maxAmt*100);
+          const isHigh=mk===highMonth;
+          return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="font-size:11px;color:var(--muted);width:52px;flex-shrink:0;">${mk}</div>
+            <div style="flex:1;height:6px;background:rgba(255,255,255,0.07);border-radius:3px;">
+              <div style="height:6px;border-radius:3px;width:${barPct}%;background:${isHigh?'var(--red)':'#00d68f'};"></div>
+            </div>
+            <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:12px;font-weight:700;min-width:56px;text-align:right;color:${isHigh?'var(--red)':'inherit'};">${fmt(amt)}</div>
+          </div>`;
+        }).join('')}
+        ${budget>0?`<div style="margin-top:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);">
+          <div style="width:24px;height:2px;background:rgba(255,165,2,0.6);border-radius:1px;border:1px dashed rgba(255,165,2,0.5);"></div> Budget: ${fmt(budget)}/mo
+        </div>`:''}
+      </div>
+
+      <!-- Top vendors -->
+      ${topVendors.length?`
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:14px 16px;margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;font-family:'Cabinet Grotesk',sans-serif;">Top Vendors</div>
+        ${topVendors.map(([v,a],i)=>`
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;${i===topVendors.length-1?'margin-bottom:0':''}">
+            <div style="font-size:12px;color:var(--soft);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${v}</div>
+            <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:13px;font-weight:800;flex-shrink:0;">${fmt(a)}</div>
+            <div style="font-size:10px;color:var(--muted);flex-shrink:0;min-width:32px;text-align:right;">${(a/total*100).toFixed(0)}%</div>
+          </div>`).join('')}
+      </div>`:''}
+
+      <!-- Smart observations -->
+      <div style="background:linear-gradient(145deg,rgba(0,214,143,0.06),rgba(0,201,177,0.04));border:1px solid rgba(0,214,143,0.15);border-radius:16px;padding:16px;margin-bottom:4px;">
+        <div style="font-size:11px;font-weight:800;color:#00d68f;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;font-family:'Cabinet Grotesk',sans-serif;">✦ Observations</div>
+        ${[
+          topVendor && parseInt(topVendorPct) > 30
+            ? `<b>${topVendor[0]}</b> accounts for <b>${topVendorPct}%</b> of all ${cat} spending — your dominant vendor in this category.`
+            : topVendor
+            ? `Spending is spread across ${topVendors.length} vendors, with <b>${topVendor[0]}</b> leading at ${fmt(topVendor[1])}.`
+            : null,
+          budget > 0 && parseFloat(vsBudget) > 15
+            ? `You're running <b>${vsBudget}% over budget</b> on average. Consider reducing to ${fmt(budget * 0.9)}/mo.`
+            : budget > 0 && parseFloat(vsBudget) < -10
+            ? `You're <b>under budget</b> by ${Math.abs(vsBudget)}% — you have room to spare here.`
+            : budget > 0
+            ? `Spending is <b>close to budget</b> — tracking well at ${fmt(avgMo)}/mo vs ${fmt(budget)} target.`
+            : `No budget set for this category. Consider setting a target in Settings.`,
+          highMonth && keys.length > 1
+            ? `<b>${highMonth}</b> was your highest spend month at ${fmt(byMonth[highMonth])}.`
+            : null,
+          trend > 100
+            ? `Spending is <b>trending up</b> — ${fmt(Math.abs(trend))} more than when tracking started.`
+            : trend < -100
+            ? `Spending is <b>trending down</b> — ${fmt(Math.abs(trend))} less than when tracking started. Good progress.`
+            : null,
+        ].filter(Boolean).map(obs=>`<div style="font-size:13px;color:var(--soft);line-height:1.6;margin-bottom:8px;padding-left:12px;border-left:2px solid rgba(0,214,143,0.3);">${obs}</div>`).join('')}
+      </div>
+    `;
+  }, 400);
+}
+
+function showVendorDrill(cat){
+  if(!cat) return;
+  // Aggregate all transactions for this category by vendor/description
+  // Filter for current month if not 'all', otherwise all months  
+  const monthFilter = (_sel && _sel !== '__all') ? _sel : null;
+  const txsForCat = _allTxs.filter(tx => tx.cat === cat && tx.amount < 0 && (!monthFilter || tx.month === monthFilter));
+  const byVendor = {};
+  for(const tx of txsForCat){
+    // Clean up description to get vendor name (first ~30 chars, strip bank prefixes)
+    let v = tx.desc
+      .replace(/^(Point Of Sale Withdrawal|External Withdrawal|NOW Withdrawal|NOW Deposit|Withdrawal|Deposit)\s*/i,'')
+      .replace(/\s{2,}/g,' ')
+      .trim();
+    // Truncate to reasonable length
+    if(v.length > 40) v = v.substring(0,40).trim();
+    byVendor[v] = (byVendor[v] || 0) + Math.abs(tx.amount);
+  }
+
+  const vendors = Object.entries(byVendor).sort((a,b) => b[1]-a[1]);
+  const total = vendors.reduce((s,[,v])=>s+v,0);
+  const maxAmt = vendors[0]?.[1] || 1;
+  const keys = sortKeys(_months);
+  const n = keys.length;
+
+  // Set modal header
+  document.getElementById('vendor-cat-title').textContent = cat;
+  document.getElementById('vendor-cat-icon').textContent = EMO[cat]||'📦';
+  document.getElementById('vendor-cat-icon').style.background = PAL[Object.keys(EMO).indexOf(cat)%15]+'18';
+  document.getElementById('vendor-cat-sub').textContent = `${txsForCat.length} transactions · ${fmt(total)} total · ${fmt(total/n)}/mo avg`;
+
+  // Build vendor list
+  const list = document.getElementById('vendor-list');
+  list.innerHTML = vendors.slice(0,30).map(([vendor, amt], i)=>{
+    const pct = (amt/total*100).toFixed(1);
+    const barW = Math.round(amt/maxAmt*100);
+    const count = txsForCat.filter(tx=>{
+      let v=tx.desc.replace(/^(Point Of Sale Withdrawal|External Withdrawal|NOW Withdrawal|NOW Deposit|Withdrawal|Deposit)\s*/i,'').replace(/\s{2,}/g,' ').trim();
+      if(v.length>40)v=v.substring(0,40).trim();
+      return v===vendor;
+    }).length;
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px;">${vendor}</div>
+        <div style="height:3px;background:rgba(255,255,255,0.07);border-radius:3px;"><div style="height:3px;border-radius:3px;width:${barW}%;background:${PAL[i%15]};"></div></div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:800;">${fmt(amt)}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px;">${count} tx · ${pct}%</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  openModal('modal-vendor');
+}
+
+function handleFile(f){
+  if(!f) return;
+  const rd=new FileReader();
+  rd.onload=e=>{
+    const{headers,rows}=parseCSV(e.target.result);
+    const newTxs=processCSV(rows,headers);
+    const newMonths=aggregate(newTxs);
+    const newKeys=sortKeys(newMonths);
+
+    // Merge: new data overwrites matching months, keeps non-overlapping months
+    for(const mk of newKeys){
+      _months[mk]=newMonths[mk];
+    }
+    // Merge transaction arrays: remove old txs for overwritten months, add new
+    _allTxs=_allTxs.filter(tx=>!newKeys.includes(tx.month));
+    _allTxs=_allTxs.concat(newTxs);
+
+    const allKeys=sortKeys(_months);
+    _sel=newKeys[newKeys.length-1];
+
+    const totalTxs=_allTxs.length;
+    document.getElementById('hdr-sub').textContent=`${totalTxs} transactions · ${allKeys.length} months`;
+
+    // Add to log
+    addToLog(f.name, newTxs.length, newKeys.length, newKeys.join(', '));
+
+    // Persist
+    saveData();
+
+    renderAll();
+    showScreen('summary',document.querySelectorAll('.nav-btn')[0]);
+  };
+  rd.readAsText(f);
+}
+
+// ════ FORMAT ════
+function fmt(n){ if(n===undefined||n===null)return'—'; const a=Math.abs(n); return(n<0?'(':'')+'$'+a.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})+(n<0?')':''); }
+function fmtS(n){ return n>=0?`+${fmt(n)}`:`-${fmt(Math.abs(n))}`; }
+
+// ════ PALETTE ════
+const PAL=['#00d68f','#2979ff','#00c9b1','#ffa502','#ff4757','#7c4dff','#ff6b81','#1de9b6','#ff9f43','#5352ed','#26de81','#4bcffa','#fd9644','#a55eea','#45aaf2'];
+const EMO={'Groceries':'🛒','Dining Out':'🍽','Fast Food':'🍔','Coffee':'☕','Gas/Fuel':'⛽','Transport':'🚗','Subscriptions':'📺','Online Shopping':'🛍','Utilities':'⚡','Insurance':'🛡','Rent/Mortgage':'🏠','Entertainment':'🎬','Personal Care':'💅','Clothing':'👗','Healthcare':'💊','Pets':'🐾','Other':'📦','_income':'💵','Unclassified':'❓'};
+
+// ════ RENDER ════
+function renderAll(){ renderSummary(); renderBudget(); renderTxs(); }
+
+function renderSummary(){
+  const keys=sortKeys(_months);
+  if(!keys.length)return;
+  const m=_months[_sel]||_months[keys[keys.length-1]];
+  const expTotal=Object.values(m.expenses).reduce((s,v)=>s+v,0);
+  const net=m.income-expTotal;
+  const cats=Object.entries(m.expenses).sort((a,b)=>b[1]-a[1]);
+  const maxAmt=cats[0]?.[1]||1;
+  const pills=keys.map(k=>`<div class="pill ${k===_sel?'active':''}" onclick="selMonth('${k}')">${k}</div>`).join('')
+    +`<div class="pill ${_sel==='__all'?'active':''}" onclick="selMonth('__all')">All</div>`;
+
+  document.getElementById('summary-content').innerHTML=`
+    <div class="gb-welcome">
+      <div class="gb-brand-wrap">
+        <div class="gb-brand-glow"></div>
+        <svg class="gb-logo-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="110" width="28" height="50" rx="6" fill="url(#bg1a)" opacity="0.9"/>
+          <rect x="56" y="80" width="28" height="80" rx="6" fill="url(#bg1a)" opacity="0.95"/>
+          <rect x="92" y="50" width="28" height="110" rx="6" fill="url(#bg1a)"/>
+          <rect x="128" y="70" width="28" height="90" rx="6" fill="url(#bg2a)" opacity="0.85"/>
+          <rect x="164" y="90" width="28" height="70" rx="6" fill="url(#bg2a)" opacity="0.8"/>
+          <rect x="200" y="60" width="28" height="100" rx="6" fill="url(#bg1a)" opacity="0.9"/>
+          <rect x="236" y="40" width="28" height="120" rx="6" fill="url(#bg1a)"/>
+          <rect x="10" y="161" width="260" height="2" rx="1" fill="rgba(255,255,255,0.1)"/>
+          <polyline points="34,110 70,80 106,50 142,70 178,90 214,60 250,40" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+          <defs>
+            <linearGradient id="bg1a" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00d68f"/><stop offset="100%" stop-color="#00a86b" stop-opacity="0.7"/></linearGradient>
+            <linearGradient id="bg2a" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00c9b1"/><stop offset="100%" stop-color="#0099a0" stop-opacity="0.7"/></linearGradient>
+          </defs>
+        </svg>
+        <div class="gb-brand-name"><span class="gb-brand-green">Green</span>bar</div>
+        <div class="gb-brand-tagline">Your money, clearly.</div>
+      </div>
+      <div class="pills-row" style="margin-bottom:12px;">${pills}</div>
+      <div class="net-card" style="margin-bottom:12px;">
+        <div class="pulse"></div>
+        <div class="net-lbl">Monthly Net</div>
+        <div class="net-amt ${net>=0?'surplus':'deficit'}">${net>=0?'+':''}${fmt(net)}</div>
+        <div class="net-mo">${_sel}</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-tile"><div class="st-lbl">Income</div><div class="st-val c-green">${fmt(m.income)}</div></div>
+        <div class="stat-tile"><div class="st-lbl">Expenses</div><div class="st-val c-red">${fmt(expTotal)}</div></div>
+        <div class="stat-tile"><div class="st-lbl">Txs</div><div class="st-val c-teal">${m.txs.length}</div></div>
+      </div>
+      <div class="sec-hdr">Top Categories <span class="sec-total">${fmt(expTotal)}</span></div>
+      <div class="cat-list">
+        ${cats.slice(0,8).map(([cat,amt],i)=>`
+        <div class="cat-item" style="flex-direction:column;align-items:stretch;gap:8px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="cat-icon" style="background:${PAL[i%15]}18">${EMO[cat]||'•'}</div>
+            <div class="cat-body">
+              <div class="cat-name">${cat}</div>
+              <div class="cat-bar-bg"><div class="cat-bar-fg" style="width:${Math.round(amt/maxAmt*100)}%;background:${PAL[i%15]}"></div></div>
+            </div>
+            <div class="cat-right">
+              <div class="cat-amt">${fmt(amt)}</div>
+              <div class="cat-pct">${(amt/expTotal*100).toFixed(1)}%</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="showVendorDrill(this.dataset.cat)" data-cat="${cat.replace(/\"/g,'&quot;')}" style="flex:1;padding:7px 0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--soft);font-size:11px;font-weight:600;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;">📋 Transactions</button>
+            <button onclick="showCatInsights(this.dataset.cat)" data-cat="${cat.replace(/\"/g,'&quot;')}" style="flex:1;padding:7px 0;border-radius:10px;border:1px solid rgba(0,214,143,0.25);background:rgba(0,214,143,0.08);color:#00d68f;font-size:11px;font-weight:600;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;">✦ Insights</button>
+          </div>
+        </div>`).join('')}}
+      </div>
+    </div>`;
+}
+function selMonth(mk){
+  _sel=mk;
+  if(mk==='__all')renderSummaryAll();
+  else{renderSummary();renderBudget();renderTxs();}
+}
+
+function renderSummaryAll(){
+  const keys=sortKeys(_months);
+  const pills=keys.map(k=>`<div class="pill" onclick="selMonth('${k}')">${k}</div>`).join('')
+    +`<div class="pill active" onclick="selMonth('__all')">All</div>`;
+  const allCats={};let totalInc=0,totalExp=0;
+  for(const mk of keys){const m=_months[mk];totalInc+=m.income;for(const[c,v]of Object.entries(m.expenses)){allCats[c]=(allCats[c]||0)+v;totalExp+=v;}}
+  const n=keys.length;
+  const cats=Object.entries(allCats).map(([c,t])=>([c,t/n])).sort((a,b)=>b[1]-a[1]);
+  const maxAvg=cats[0]?.[1]||1;
+
+  document.getElementById('summary-content').innerHTML=`
+    <div class="gb-welcome">
+      <div class="gb-brand-wrap">
+        <div class="gb-brand-glow"></div>
+        <svg class="gb-logo-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="110" width="28" height="50" rx="6" fill="url(#barGrad1b)" opacity="0.9"/>
+          <rect x="56" y="80" width="28" height="80" rx="6" fill="url(#barGrad1b)" opacity="0.95"/>
+          <rect x="92" y="50" width="28" height="110" rx="6" fill="url(#barGrad1b)"/>
+          <rect x="128" y="70" width="28" height="90" rx="6" fill="url(#barGrad2b)" opacity="0.85"/>
+          <rect x="164" y="90" width="28" height="70" rx="6" fill="url(#barGrad2b)" opacity="0.8"/>
+          <rect x="200" y="60" width="28" height="100" rx="6" fill="url(#barGrad1b)" opacity="0.9"/>
+          <rect x="236" y="40" width="28" height="120" rx="6" fill="url(#barGrad1b)"/>
+          <rect x="10" y="161" width="260" height="2" rx="1" fill="rgba(255,255,255,0.1)"/>
+          <polyline points="34,110 70,80 106,50 142,70 178,90 214,60 250,40" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+          <defs>
+            <linearGradient id="barGrad1b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00d68f"/><stop offset="100%" stop-color="#00a86b" stop-opacity="0.7"/></linearGradient>
+            <linearGradient id="barGrad2b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00c9b1"/><stop offset="100%" stop-color="#0099a0" stop-opacity="0.7"/></linearGradient>
+          </defs>
+        </svg>
+        <div class="gb-brand-name"><span class="gb-brand-green">Green</span>bar</div>
+        <div class="gb-brand-tagline">Your money, clearly.</div>
+      </div>
+
+      <div class="pills-row" style="margin-bottom:12px;">${pills}</div>
+      <div class="net-card" style="margin-bottom:12px;">
+        <div class="pulse"></div>
+        <div class="net-lbl">Total Net — ${n} Months</div>
+        <div class="net-amt ${totalInc>=totalExp?'surplus':'deficit'}">${totalInc>=totalExp?'+':''}${fmt(totalInc-totalExp)}</div>
+        <div class="net-mo">Avg ${fmt((totalInc-totalExp)/n)}/mo</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-tile"><div class="st-lbl">Total Inc</div><div class="st-val c-green">${fmt(totalInc)}</div></div>
+        <div class="stat-tile"><div class="st-lbl">Total Exp</div><div class="st-val c-red">${fmt(totalExp)}</div></div>
+        <div class="stat-tile"><div class="st-lbl">Months</div><div class="st-val c-teal">${n}</div></div>
+      </div>
+      <div class="sec-hdr">Avg Monthly Spend <span class="sec-total">${fmt(totalExp/n)}/mo</span></div>
+      <div class="cat-list">
+        ${cats.slice(0,8).map(([cat,avg],i)=>`
+        <div class="cat-item" style="flex-direction:column;align-items:stretch;gap:8px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="cat-icon" style="background:${PAL[i%15]}18">${EMO[cat]||'•'}</div>
+            <div class="cat-body">
+              <div class="cat-name">${cat}</div>
+              <div class="cat-bar-bg"><div class="cat-bar-fg" style="width:${Math.round(avg/maxAvg*100)}%;background:${PAL[i%15]}"></div></div>
+            </div>
+            <div class="cat-right">
+              <div class="cat-amt">${fmt(avg)}/mo</div>
+              <div class="cat-pct">${(avg/(totalExp/n)*100).toFixed(1)}%</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="showVendorDrill(this.dataset.cat)" data-cat="${cat.replace(/"/g,'&quot;')}" style="flex:1;padding:7px 0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--soft);font-size:11px;font-weight:600;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;">📋 Transactions</button>
+            <button onclick="showCatInsights(this.dataset.cat)" data-cat="${cat.replace(/"/g,'&quot;')}" style="flex:1;padding:7px 0;border-radius:10px;border:1px solid rgba(0,214,143,0.25);background:rgba(0,214,143,0.08);color:#00d68f;font-size:11px;font-weight:600;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;">✦ Insights</button>
+          </div>
+        </div>`).join('')}}
+      </div>
+    </div>`;
+}
+
+function renderBudget(){
+  const mk=_sel==='__all'?sortKeys(_months).slice(-1)[0]:_sel;
+  const m=_months[mk];
+  if(!m){document.getElementById('budget-content').innerHTML='<div class="empty"><div class="empty-icon">📋</div><p>Import a CSV to see budget vs actual</p></div>';return;}
+  const expTotal=Object.values(m.expenses).reduce((s,v)=>s+v,0);
+  const budTotal=Object.values(CFG.budget).reduce((s,v)=>s+v,0);
+  const rows=Object.entries(CFG.budget).map(([cat,bud])=>({cat,bud,actual:m.expenses[cat]||0})).filter(r=>r.bud>0||r.actual>0).sort((a,b)=>b.actual-a.actual);
+  const unb=Object.entries(m.expenses).filter(([cat])=>!CFG.budget[cat]).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const totalVar=budTotal-expTotal;
+  document.getElementById('budget-content').innerHTML=`
+    <div class="sec-hdr" style="margin-top:8px">Budget vs Actual <span class="sec-total">${mk}</span></div>
+    <div class="stat-row" style="margin-bottom:14px">
+      <div class="stat-tile"><div class="st-lbl">Budgeted</div><div class="st-val c-teal">${fmt(budTotal)}</div></div>
+      <div class="stat-tile"><div class="st-lbl">Actual</div><div class="st-val c-red">${fmt(expTotal)}</div></div>
+      <div class="stat-tile"><div class="st-lbl">Variance</div><div class="st-val ${totalVar>=0?'c-green':'c-red'}">${fmtS(totalVar)}</div></div>
+    </div>
+    <div class="bva-card">
+      <div class="bva-head"><span>Category</span><span>Budget</span><span>Actual</span><span>Δ</span></div>
+      ${rows.map(r=>{const v=r.bud-r.actual;const cls=v<-20?'v-over':v>20?'v-under':'v-flat';
+        return`<div class="bva-row"><div class="bva-cat">${EMO[r.cat]||''} ${r.cat}</div><div class="bva-num" style="color:var(--muted)">${fmt(r.bud)}</div><div class="bva-num">${fmt(r.actual)}</div><div class="bva-num ${cls}">${v>=0?'+':''}${fmt(v)}</div></div>`;}).join('')}
+    </div>
+    ${unb.length?`<div class="sec-hdr">Unbudgeted</div><div class="bva-card">${unb.map(([cat,amt])=>`<div class="bva-row"><div class="bva-cat">${EMO[cat]||'•'} ${cat}</div><div class="bva-num" style="color:var(--muted)">—</div><div class="bva-num">${fmt(amt)}</div><div class="bva-num v-flat">—</div></div>`).join('')}</div>`:''}`;
+}
+
+function renderTxs(filter=''){
+  const mk=_sel==='__all'?null:_sel;
+  const txs=(_allTxs||[]).filter(tx=>(!mk||tx.month===mk)&&(!filter||tx.desc.toLowerCase().includes(filter.toLowerCase())||tx.cat.toLowerCase().includes(filter.toLowerCase()))).sort((a,b)=>b.date.localeCompare(a.date));
+  if(!txs.length){document.getElementById('txs-content').innerHTML='<div class="empty"><div class="empty-icon">💳</div><p>No transactions found</p></div>';return;}
+  const byDate={};for(const tx of txs){if(!byDate[tx.date])byDate[tx.date]=[];byDate[tx.date].push(tx);}
+  document.getElementById('txs-content').innerHTML=`
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search…" value="${filter}" oninput="renderTxs(this.value)" autocomplete="off">
+    </div>
+    ${Object.entries(byDate).map(([date,dTxs])=>`
+      <div class="tx-date-hdr">${date}</div>
+      <div class="tx-group">
+        ${dTxs.map(tx=>{
+          const ci=Object.keys(EMO).indexOf(tx.cat);
+          const col=PAL[(ci>=0?ci:Math.abs((tx.cat||'').charCodeAt(0)||0))%15];
+          return`<div class="tx-item">
+            <div class="tx-ic" style="background:${col}18">${EMO[tx.cat]||'💵'}</div>
+            <div class="tx-bd"><div class="tx-desc">${tx.desc}</div><div class="tx-cat">${tx.cat}</div></div>
+            <div class="tx-amt ${tx.amount<0?'neg':'pos'}">${tx.amount<0?'−':'+'}${fmt(Math.abs(tx.amount))}</div>
+          </div>`;}).join('')}
+      </div>`).join('')}`;
+}
+
+// ════ NAV ════
+function showScreen(name,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(name==='budget')renderBudget();
+  if(name==='txs')renderTxs();
+  if(name==='settings'){syncUI();renderBudgetInputs();}
+}
+
+// ════ MODALS ════
+function openModal(id){ document.getElementById(id).classList.add('open'); if(id==='modal-remaps')renderRemaps(); if(id==='modal-log')renderLog(); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function closeOut(e,id){ if(e.target===document.getElementById(id)) closeModal(id); }
+
+loadCFG();
+// Load persisted transaction data
+if(loadData()){
+  const allKeys=sortKeys(_months);
+  document.getElementById('hdr-sub').textContent=`${_allTxs.length} transactions · ${allKeys.length} months`;
+  renderAll();
+  showScreen('summary',document.querySelectorAll('.nav-btn')[0]);
+}
+updateLogBadge();
+</script>
+
+<!-- CATEGORY INSIGHTS MODAL -->
+<div class="modal-overlay" id="modal-cat-insights" onclick="closeOut(event,'modal-cat-insights')">
+  <div class="modal-sheet" style="max-height:92vh;">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div id="ins-cat-icon" style="width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;"></div>
+      <div>
+        <div class="modal-title" id="ins-cat-title" style="margin-bottom:0;font-size:18px;"></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;" id="ins-cat-sub"></div>
+      </div>
+    </div>
+    <div id="ins-loading" style="text-align:center;padding:40px 0;display:none;">
+      <div style="font-size:32px;margin-bottom:12px;animation:spin 1s linear infinite;">◌</div>
+      <div style="font-size:13px;color:var(--muted);">Analyzing your spending…</div>
+    </div>
+    <div id="ins-content"></div>
+  </div>
+</div>
+
+<!-- VENDOR DRILL-DOWN MODAL -->
+<div class="modal-overlay" id="modal-vendor" onclick="closeOut(event,'modal-vendor')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+      <div id="vendor-cat-icon" style="width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;"></div>
+      <div>
+        <div class="modal-title" id="vendor-cat-title" style="margin-bottom:0;font-size:18px;"></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;" id="vendor-cat-sub"></div>
+      </div>
+    </div>
+    <div class="modal-sub" id="vendor-modal-sub" style="margin-bottom:16px;"></div>
+    <div id="vendor-list"></div>
+  </div>
+</div>
+
+<!-- LOG MODAL -->
+<div class="modal-overlay" id="modal-log" onclick="closeOut(event,'modal-log')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div class="modal-title" style="margin-bottom:0">Upload Log</div>
+      <button onclick="clearLog()" style="background:rgba(255,71,87,0.12);border:1px solid rgba(255,71,87,0.2);border-radius:10px;padding:6px 12px;color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:'Satoshi',sans-serif;">Clear All</button>
+    </div>
+    <div class="modal-sub">Every CSV you import is saved here. Tap any entry to restore it.</div>
+    <div id="log-list"></div>
+    <div id="log-empty" style="text-align:center;padding:40px 0;color:var(--muted);font-size:14px;display:none;">No uploads yet.<br>Import a CSV to start logging.</div>
+  </div>
+</div>
+
+</body>
+</html>
